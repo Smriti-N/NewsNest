@@ -1,0 +1,21 @@
+{
+  "name": "newsnest",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NewsNest - the news in 50 words or fewer.",
+  "license": "MIT",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c blue,magenta \"npm run dev -w server\" \"npm run dev -w client\"",
+    "test": "npm test -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.11"
+  }
+}
