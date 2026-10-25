@@ -47,13 +47,15 @@ Thanks for joining Hack Day! This guide shows how to go from "I picked an issue"
 
 ## How PRs are scored
 
-Each PR earns its tag's base points multiplied by a quality score:
+Every issue has exactly one tag:
 
-| Criterion | Weight | What the judge checks |
+| Tag | Points | Expected time |
 | --- | --- | --- |
-| Works | 50% | Meets the issue's "Done when" and the app still runs |
-| Code quality | 30% | Focused change, readable, no unrelated edits or broken files |
-| PR description | 20% | Title, `Closes #N`, what changed and why, screenshot if visible |
+| `documentation` | 5 | under 1 hour |
+| `beginner` | 10 | under 1 hour |
+| `hard` | 20 | 3 to 5 hours |
+
+Judges look at: does it solve the issue, is the change clean and small, did you test it, is the PR description clear.
 
 ## Good PR descriptions
 
