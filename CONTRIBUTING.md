@@ -51,9 +51,9 @@ Every issue has exactly one tag:
 
 | Tag | Points | Expected time |
 | --- | --- | --- |
-| `documentation` | 5 | under 1 hour |
-| `beginner` | 10 | under 1 hour |
-| `hard` | 20 | 3 to 5 hours |
+| `documentation` | 1 | under 20 min |
+| `beginner` | 10 | under 40 min |
+| `hard` | 20 | 1- 3 hours |
 
 Judges look at: does it solve the issue, is the change clean and small, did you test it, is the PR description clear.
 
