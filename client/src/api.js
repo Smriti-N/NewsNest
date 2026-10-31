@@ -35,3 +35,11 @@ export function createArticle(body) {
     body: JSON.stringify(body),
   });
 }
+
+export function subscribe(email) {
+  return request('/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+}
