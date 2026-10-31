@@ -8,7 +8,7 @@ import { countWords } from '../utils/wordCount.js';
 
 export function filterByCategory(items, category) {
   if (!category || category === 'all') return items;
-  return items.filter((a) => a.category !== category);
+  return items.filter((a) => a.category === category);
 }
 
 export function searchArticles(items, q) {
@@ -21,8 +21,9 @@ export function sortArticles(items, sort = 'latest') {
   if (sort === 'popular') {
     return [...items].sort((a, b) => b.views - a.views);
   }
+
   return [...items].sort(
-    (a, b) => new Date(a.publishedAt) - new Date(b.publishedAt)
+    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
   );
 }
 
