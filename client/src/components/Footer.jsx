@@ -1,13 +1,26 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useToast } from '../context/ToastContext.jsx';
+import { subscribe } from '../api.js';
 import Icon from './Icon.jsx';
 
 export default function Footer() {
   const toast = useToast();
+  const [email, setEmail] = useState('');
+  const [sending, setSending] = useState(false);
 
-  function handleSubscribe(e) {
+  async function handleSubscribe(e) {
     e.preventDefault();
-    toast('Subscriptions are coming soon.', 'info');
+    setSending(true);
+    try {
+      await subscribe(email);
+      toast('Subscribed! Look out for your first digest.', 'success');
+      setEmail('');
+    } catch (err) {
+      toast(err.message, 'error');
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -39,8 +52,15 @@ export default function Footer() {
         <div>
           <h4>Daily digest</h4>
           <form className="subscribe" onSubmit={handleSubscribe}>
-            <input type="email" placeholder="you@example.com" aria-label="Email address" required />
-            <button className="btn btn-primary" type="submit" aria-label="Subscribe">
+            <input
+              type="email"
+              placeholder="you@example.com"
+              aria-label="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button className="btn btn-primary" type="submit" aria-label="Subscribe" disabled={sending}>
               <Icon name="mail" size={16} />
             </button>
           </form>
