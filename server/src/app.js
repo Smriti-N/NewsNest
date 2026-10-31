@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import articlesRouter from './routes/articles.js';
+import subscribeRouter from './routes/subscribe.js';
 import { getStore } from './store/index.js';
 import { categoryCounts } from './services/articleService.js';
 
@@ -29,6 +30,7 @@ app.get('/api/categories', async (req, res, next) => {
 });
 
 app.use('/api/articles', articlesRouter);
+app.use('/api/subscribe', subscribeRouter);
 
 app.use('/api', (req, res) => {
   res.status(404).json({ error: 'Not found' });
