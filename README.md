@@ -1,5 +1,7 @@
 # NewsNest
 
+**[English](README.md) | [हिन्दी](README.hi.md)**
+
 **The news in 50 words or fewer.**
 
 NewsNest is a news-in-short app. Every story is a card with a headline, a summary of at most 50 words, and a link to the full article. Browse a featured carousel and a trending list, explore by category, search, save stories for later, or write one of your own.
@@ -7,6 +9,38 @@ NewsNest is a news-in-short app. Every story is a card with a headline, a summar
 Built with the MERN stack (MongoDB, Express, React, Node). It runs **without any database or login** by default, so you can be up and running in two commands.
 
 > **Hack Day project.** This repo is deliberately incomplete: some things are broken and some features are missing. Each one is a GitHub issue. Pick one, fix it, and open a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+## Screenshots
+
+### 1. Home Dashboard & Trending Carousel
+Browse breaking news marquee, hero featured stories, top trending list, and filterable story cards.
+
+![NewsNest Homepage](docs/screenshots/home-overview.svg)
+
+---
+
+### 2. Story Detail & Related News
+Read 50-word stories with reading metrics, source links, one-click bookmarks, and related category news.
+
+![NewsNest Story View](docs/screenshots/article-view.svg)
+
+---
+
+### 3. Story Authoring & Live 50-Word Counter
+Submit stories with real-time word counting, 50-word validation progress, and a side-by-side preview.
+
+![NewsNest Write Story](docs/screenshots/write-story.svg)
+
+---
+
+### 4. Categories & Search
+Explore stories organized into nine distinct topics with real-time text search and popularity sorting.
+
+![NewsNest Categories and Search](docs/screenshots/categories-search.svg)
+
+---
 
 ## Features
 
@@ -39,6 +73,8 @@ Then open **http://localhost:5173**. The API runs on http://localhost:5000.
 
 That is all. No database, login, API key or Docker needed.
 
+> Having trouble running the app? See the [Troubleshooting Guide](docs/TROUBLESHOOTING.md).
+
 ### Optional settings
 
 Copy `server/.env.example` to `server/.env` to change any of these:
@@ -49,12 +85,22 @@ Copy `server/.env.example` to `server/.env` to change any of these:
 | `MONGO_URI` | empty | Leave empty and NewsNest never connects to a database: stories live in memory and reset when the server restarts. Set it only if you want to store stories in MongoDB. |
 | `API_DELAY_MS` | `700` | Adds a random delay of up to this many milliseconds to every API call, to imitate a slow network. Set `0` to turn it off. |
 
+## Documentation
+
+Comprehensive documentation is available in the [`docs/`](docs/) directory:
+
+- 🏛️ **[Client-Server Architecture](docs/ARCHITECTURE.md)**: System design, component breakdown, sequence diagrams, and state management.
+- 📡 **[REST API Documentation](docs/API.md)**: Detailed specifications for all endpoints, query parameters, payloads, and response status codes.
+- 🔧 **[Troubleshooting Guide](docs/TROUBLESHOOTING.md)**: Common installation errors, Node version issues, port conflicts, proxy setup, and fixes.
+- 📚 **[Story Data & Seed Guide](docs/SEED_DATA.md)**: Schema rules, dynamic timestamp transformation (`hoursAgo` to `publishedAt`), and how to add mock stories.
+
 ## Project layout
 
 ```
 newsnest/
   client/   React app (Vite)
   server/   Express API
+  docs/     Architecture, API, troubleshooting & seed guides
   .github/  Pull request template
 ```
 
