@@ -35,6 +35,35 @@ export default function Home() {
     };
   }, [category]);
 
+  // Server-Sent Events for real-time article updates (Issue #23)
+  useEffect(() => {
+    let eventSource;
+    try {
+      eventSource = new EventSource('/api/articles/events');
+      eventSource.onmessage = (event) => {
+        try {
+          const newArticle = JSON.parse(event.data);
+          if (!newArticle || !newArticle.id) return;
+          setItems((prev) => {
+            if (prev.some((a) => a.id === newArticle.id)) return prev;
+            if (category !== 'all' && newArticle.category !== category) return prev;
+            return [newArticle, ...prev];
+          });
+        } catch {
+          // ignore non-json messages
+        }
+      };
+    } catch {
+      // EventSource not supported or failed
+    }
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+  }, [category]);
+
   async function loadMore() {
     const next = page + 1;
     try {
@@ -62,7 +91,21 @@ export default function Home() {
         </div>
         <CategoryChips active={category} onChange={setCategory} />
 
-        {/* TODO: show a loading indicator here while `loading` is true */}
+        {loading && (
+          <div className="grid" role="status" aria-label="Loading latest stories">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="skeleton-card skeleton-pulse">
+                <div className="skeleton-media" />
+                <div className="skeleton-body">
+                  <div className="skeleton-line skeleton-line-title" />
+                  <div className="skeleton-line" />
+                  <div className="skeleton-line" style={{ width: '70%' }} />
+                  <div className="skeleton-line skeleton-line-meta" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {error && <p className="notice notice-error">{error}</p>}
 

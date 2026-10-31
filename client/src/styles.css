@@ -332,3 +332,49 @@ ul { margin: 0; padding-left: 1.2rem; }
   .ticker-track, .hero-empty, .hero-slide, .toast { animation: none; }
   .card, .btn, .tile { transition: none; }
 }
+
+/* Skeleton loading */
+.skeleton-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.skeleton-media {
+  aspect-ratio: 16 / 9;
+  background: var(--border);
+  opacity: 0.6;
+}
+.skeleton-body {
+  padding: 14px 16px 16px;
+  display: grid;
+  gap: 10px;
+}
+.skeleton-line {
+  height: 14px;
+  border-radius: 4px;
+  background: var(--border);
+  opacity: 0.6;
+}
+.skeleton-line-title {
+  height: 18px;
+  width: 85%;
+}
+.skeleton-line-meta {
+  height: 12px;
+  width: 50%;
+}
+.skeleton-pulse {
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.85; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-pulse { animation: none; }
+}
