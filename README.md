@@ -1,3 +1,5 @@
+**English** | [हिन्दी](README.hi.md)
+
 # NewsNest
 
 **The news in 50 words or fewer.**
