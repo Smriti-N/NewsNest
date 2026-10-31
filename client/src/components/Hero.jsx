@@ -14,7 +14,7 @@ export default function Hero() {
     getFeatured().then(setSlides).catch(() => setSlides([]));
   }, []);
 
-  const next = () => setIndex((i) => (i + 1) % (slides.length - 1));
+  const next = () => setIndex((i) => (i + 1) % slides.length);
   const prev = () => setIndex((i) => (i - 1 + slides.length) % slides.length);
 
   useEffect(() => {
