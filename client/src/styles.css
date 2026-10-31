@@ -276,7 +276,7 @@ ul { margin: 0; padding-left: 1.2rem; }
 .notice { padding: 12px 14px; border-radius: 10px; background: var(--card); border: 1px solid var(--border); }
 .notice-error { color: var(--danger); border-color: var(--danger); }
 .empty { display: grid; justify-items: center; gap: 10px; text-align: center; padding: 56px 20px; background: var(--card); border: 1px dashed var(--border); border-radius: var(--radius); color: var(--muted); }
-.empty h2 { color: var(--text); }
+.empty h1, .empty h2 { color: var(--text); }
 .empty p { margin: 0; }
 
 .toasts { position: fixed; right: 18px; bottom: 18px; z-index: 100; display: grid; gap: 8px; }
