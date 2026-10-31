@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getStore } from '../store/index.js';
+import { broadcast } from '../events.js';
 import {
   listArticles,
   getTrending,
@@ -86,6 +87,7 @@ router.post('/', async (req, res, next) => {
     if (errors.length) return res.status(400).json({ errors });
     const store = await getStore();
     const created = await store.create(value);
+    broadcast('article', created);
     res.status(201).json(created);
   } catch (err) {
     next(err);

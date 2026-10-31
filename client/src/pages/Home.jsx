@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { getArticles } from '../api.js';
+import { useEffect, useRef, useState } from 'react';
+import { getArticles, subscribeToStories } from '../api.js';
 import Ticker from '../components/Ticker.jsx';
 import Hero from '../components/Hero.jsx';
 import TrendingList from '../components/TrendingList.jsx';
@@ -16,6 +16,8 @@ export default function Home() {
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [pending, setPending] = useState([]);
+  const shownIds = useRef(new Set());
 
   useEffect(() => {
     let ignore = false;
@@ -35,11 +37,34 @@ export default function Home() {
     };
   }, [category]);
 
+  // Keep a live connection open and collect stories published elsewhere.
+  useEffect(() => {
+    setPending([]);
+    return subscribeToStories((article) => {
+      if (category !== 'all' && article.category !== category) return;
+      if (shownIds.current.has(article.id)) return;
+      setPending((prev) => (prev.some((a) => a.id === article.id) ? prev : [article, ...prev]));
+    });
+  }, [category]);
+
+  useEffect(() => {
+    shownIds.current = new Set(items.map((a) => a.id));
+  }, [items]);
+
+  function showPending() {
+    setItems((prev) => [...pending.filter((a) => !shownIds.current.has(a.id)), ...prev]);
+    setPending([]);
+  }
+
   async function loadMore() {
     const next = page + 1;
     try {
       const res = await getArticles({ category, sort: 'latest', page: next, limit: PAGE_SIZE });
-      setItems((prev) => [...prev, ...res.items]);
+      // New stories shift the pages, so skip anything already on screen.
+      setItems((prev) => {
+        const seen = new Set(prev.map((a) => a.id));
+        return [...prev, ...res.items.filter((a) => !seen.has(a.id))];
+      });
       setHasMore(res.hasMore);
       setPage(next);
     } catch (e) {
@@ -63,6 +88,12 @@ export default function Home() {
         <CategoryChips active={category} onChange={setCategory} />
 
         {/* TODO: show a loading indicator here while `loading` is true */}
+
+        {pending.length > 0 && (
+          <button className="new-stories" onClick={showPending}>
+            {pending.length} new {pending.length === 1 ? 'story' : 'stories'}, click to load
+          </button>
+        )}
 
         {error && <p className="notice notice-error">{error}</p>}
 
