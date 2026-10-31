@@ -42,7 +42,11 @@ export default function Write() {
       toast('Your story is live', 'success');
       navigate(`/article/${created.id}`);
     } catch (err) {
-      setError(err.message);
+      setError(
+        err.status === 429
+          ? `Thanks for all the stories! ${err.message}`
+          : err.message
+      );
     } finally {
       setSending(false);
     }
