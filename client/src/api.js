@@ -35,3 +35,11 @@ export function createArticle(body) {
     body: JSON.stringify(body),
   });
 }
+
+// Calls onArticle for every story published while the connection is open.
+// Returns a function that closes the connection.
+export function subscribeToStories(onArticle) {
+  const source = new EventSource('/api/events');
+  source.addEventListener('article', (e) => onArticle(JSON.parse(e.data)));
+  return () => source.close();
+}

@@ -3,6 +3,7 @@ import cors from 'cors';
 import articlesRouter from './routes/articles.js';
 import { getStore } from './store/index.js';
 import { categoryCounts } from './services/articleService.js';
+import { eventsHandler } from './events.js';
 
 const app = express();
 
@@ -12,6 +13,9 @@ app.use(express.json());
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
+
+// Live updates for new stories (see events.js).
+app.get('/api/events', eventsHandler);
 
 // Simulated network latency so loading states are easy to see.
 const MAX_DELAY = Number(process.env.API_DELAY_MS ?? 700);

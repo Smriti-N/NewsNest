@@ -275,6 +275,7 @@ ul { margin: 0; padding-left: 1.2rem; }
 /* ---------- Notices, empty, toasts ---------- */
 .notice { padding: 12px 14px; border-radius: 10px; background: var(--card); border: 1px solid var(--border); }
 .notice-error { color: var(--danger); border-color: var(--danger); }
+.new-stories { display: block; width: 100%; margin-bottom: 14px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent); font: inherit; font-weight: 700; cursor: pointer; }
 .empty { display: grid; justify-items: center; gap: 10px; text-align: center; padding: 56px 20px; background: var(--card); border: 1px dashed var(--border); border-radius: var(--radius); color: var(--muted); }
 .empty h2 { color: var(--text); }
 .empty p { margin: 0; }
