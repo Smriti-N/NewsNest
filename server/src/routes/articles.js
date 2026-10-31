@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getStore } from '../store/index.js';
+import { articleCreationRateLimit } from '../middleware/articleRateLimit.js';
 import {
   listArticles,
   getTrending,
@@ -80,7 +81,7 @@ router.post('/:id/view', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', articleCreationRateLimit, async (req, res, next) => {
   try {
     const { errors, value } = validateNewArticle(req.body);
     if (errors.length) return res.status(400).json({ errors });
