@@ -10,6 +10,29 @@ import {
 
 const router = Router();
 
+// Track active Server-Sent Events (SSE) client connections
+let clients = [];
+
+function broadcastNewArticle(article) {
+  clients.forEach((client) => {
+    client.write(`data: ${JSON.stringify(article)}\n\n`);
+  });
+}
+
+// 1. Live SSE Stream endpoint (MUST be placed BEFORE /:id route)
+router.get('/events', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
+
+  clients.push(res);
+
+  req.on('close', () => {
+    clients = clients.filter((client) => client !== res);
+  });
+});
+
 router.get('/', async (req, res, next) => {
   try {
     const store = await getStore();
@@ -86,6 +109,10 @@ router.post('/', async (req, res, next) => {
     if (errors.length) return res.status(400).json({ errors });
     const store = await getStore();
     const created = await store.create(value);
+
+    // Broadcast the new story to all active tabs
+    broadcastNewArticle(created);
+
     res.status(201).json(created);
   } catch (err) {
     next(err);
