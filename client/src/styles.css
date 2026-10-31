@@ -282,6 +282,7 @@ ul { margin: 0; padding-left: 1.2rem; }
 .toasts { position: fixed; right: 18px; bottom: 18px; z-index: 100; display: grid; gap: 8px; }
 .toast { display: flex; align-items: center; gap: 8px; padding: 11px 16px; border-radius: 10px; background: #12172b; color: #fff; font-weight: 600; font-size: 0.9rem; box-shadow: var(--shadow-lift); animation: fade 0.2s ease; }
 .toast-success svg { color: #4ade80; }
+.toast-error svg { color: #f87171; }
 
 /* ---------- Share ---------- */
 .share { display: flex; gap: 10px; flex-wrap: wrap; }
