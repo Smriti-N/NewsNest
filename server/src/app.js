@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import articlesRouter from './routes/articles.js';
+import subscribeRouter from './routes/subscribe.js';
 import { getStore } from './store/index.js';
 import { categoryCounts } from './services/articleService.js';
 
@@ -14,9 +15,11 @@ app.get('/api/health', (req, res) => {
 });
 
 // Simulated network latency so loading states are easy to see.
-const MAX_DELAY = Number(process.env.API_DELAY_MS ?? 700);
 app.use('/api', (req, res, next) => {
-  setTimeout(next, Math.random() * MAX_DELAY);
+  if (req.path === '/articles/events') return next();
+  const maxDelay = Number(process.env.API_DELAY_MS ?? 700);
+  if (maxDelay <= 0) return next();
+  setTimeout(next, Math.random() * maxDelay);
 });
 
 app.get('/api/categories', async (req, res, next) => {
@@ -28,6 +31,7 @@ app.get('/api/categories', async (req, res, next) => {
   }
 });
 
+app.use('/api/subscribe', subscribeRouter);
 app.use('/api/articles', articlesRouter);
 
 app.use('/api', (req, res) => {
