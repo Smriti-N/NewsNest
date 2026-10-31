@@ -1,13 +1,28 @@
 import { Link } from 'react-router-dom';
 import { useToast } from '../context/ToastContext.jsx';
 import Icon from './Icon.jsx';
+import { useState } from 'react';
+import { subscribe } from '../api.js';
 
 export default function Footer() {
   const toast = useToast();
 
-  function handleSubscribe(e) {
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubscribe(e) {
     e.preventDefault();
-    toast('Subscriptions are coming soon.', 'info');
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      await subscribe(email);
+      toast('Subscribed! Your daily digest is on its way.', 'success');
+      setEmail('');
+    } catch (err) {
+      toast(err.message || 'Could not subscribe. Please try again.', 'error');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -38,9 +53,16 @@ export default function Footer() {
         </div>
         <div>
           <h4>Daily digest</h4>
-          <form className="subscribe" onSubmit={handleSubscribe}>
-            <input type="email" placeholder="you@example.com" aria-label="Email address" required />
-            <button className="btn btn-primary" type="submit" aria-label="Subscribe">
+          <form className="subscribe" onSubmit={handleSubscribe} noValidate>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              aria-label="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={submitting}
+            />
+            <button className="btn btn-primary" type="submit" aria-label="Subscribe" disabled={submitting}>
               <Icon name="mail" size={16} />
             </button>
           </form>

@@ -3,11 +3,13 @@ import cors from 'cors';
 import articlesRouter from './routes/articles.js';
 import { getStore } from './store/index.js';
 import { categoryCounts } from './services/articleService.js';
+import subscribeRouter from './routes/subscribe.js'; 
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/subscribe', subscribeRouter);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });

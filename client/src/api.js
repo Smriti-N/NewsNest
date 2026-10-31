@@ -11,14 +11,14 @@ async function request(path, options) {
   return data;
 }
 
-export function getArticles({ category, q, sort, page = 1, limit = 10 } = {}) {
+export function getArticles({ category, q, sort, page = 1, limit = 10, signal } = {}) {
   const params = new URLSearchParams();
   if (category && category !== 'all') params.set('category', category);
   if (q) params.set('q', q);
   if (sort) params.set('sort', sort);
   params.set('page', page);
   params.set('limit', limit);
-  return request(`/articles?${params}`);
+  return request(`/articles?${params}`, { signal });
 }
 
 export const getFeatured = () => request('/articles/featured');
@@ -33,5 +33,13 @@ export function createArticle(body) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
+  });
+}
+
+export function subscribe(email) {
+  return request('/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
   });
 }
