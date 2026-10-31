@@ -1,11 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 
+const THEME_KEY = 'newsnest:theme';
+
+function getInitialTheme() {
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    const isDark = saved ? saved === 'dark' : window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    return isDark;
+  } catch {
+    return false;
+  }
+}
+
 export default function Navbar() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(getInitialTheme);
   const [text, setText] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const theme = dark ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch {
+      // Ignore storage errors
+    }
+  }, [dark]);
 
   function handleSearch(e) {
     e.preventDefault();
