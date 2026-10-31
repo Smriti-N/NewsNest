@@ -25,7 +25,8 @@ export default function Write() {
     window.scrollTo(0, 0);
   }, []);
 
-  const count = form.summary.match(/\w+/g)?.length ?? 0;
+  const trimmedSummary = form.summary.trim();
+  const count = trimmedSummary ? trimmedSummary.split(/\s+/).length : 0;
   const tooLong = count > MAX_WORDS;
   const percent = Math.min(100, (count / MAX_WORDS) * 100);
 
@@ -42,7 +43,11 @@ export default function Write() {
       toast('Your story is live', 'success');
       navigate(`/article/${created.id}`);
     } catch (err) {
-      setError(err.message);
+      if (err.status === 429) {
+        setError(err.message || 'You are publishing stories too quickly. Please wait a minute before trying again.');
+      } else {
+        setError(err.message || 'Could not publish story.');
+      }
     } finally {
       setSending(false);
     }
@@ -56,6 +61,8 @@ export default function Write() {
     publishedAt: new Date().toISOString(),
     views: 0,
   };
+
+  const isPublishDisabled = sending || tooLong || count === 0 || !form.title.trim();
 
   return (
     <section>
@@ -102,7 +109,7 @@ export default function Write() {
             <input type="url" value={form.url} onChange={update('url')} placeholder="https://" />
           </label>
 
-          <button className="btn btn-primary" type="submit" disabled={sending || tooLong}>
+          <button className="btn btn-primary" type="submit" disabled={isPublishDisabled}>
             {sending ? 'Publishing...' : 'Publish story'}
           </button>
         </form>
