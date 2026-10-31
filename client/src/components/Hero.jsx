@@ -14,8 +14,15 @@ export default function Hero() {
     getFeatured().then(setSlides).catch(() => setSlides([]));
   }, []);
 
-  const next = () => setIndex((i) => (i + 1) % (slides.length - 1));
-  const prev = () => setIndex((i) => (i - 1 + slides.length) % slides.length);
+  const next = () => {
+    if (slides.length <= 1) return;
+    setIndex((i) => (i + 1) % slides.length);
+  };
+
+  const prev = () => {
+    if (slides.length <= 1) return;
+    setIndex((i) => (i - 1 + slides.length) % slides.length);
+  };
 
   useEffect(() => {
     if (slides.length < 2 || paused) return undefined;
