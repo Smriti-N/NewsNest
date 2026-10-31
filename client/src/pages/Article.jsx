@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { getArticle, getRelated, recordView } from '../api.js';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { getArticle, getRelated, getAdjacent, recordView } from '../api.js';
 import Thumb from '../components/Thumb.jsx';
 import Icon from '../components/Icon.jsx';
 import BookmarkButton from '../components/BookmarkButton.jsx';
@@ -13,8 +13,10 @@ const counted = new Set();
 
 export default function Article() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [article, setArticle] = useState(null);
   const [related, setRelated] = useState([]);
+  const [adjacent, setAdjacent] = useState({ prev: null, next: null });
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -22,6 +24,7 @@ export default function Article() {
     window.scrollTo(0, 0);
     setArticle(null);
     setRelated([]);
+    setAdjacent({ prev: null, next: null });
     setError('');
 
     getArticle(id)
@@ -29,6 +32,9 @@ export default function Article() {
       .catch((e) => !ignore && setError(e.message));
     getRelated(id)
       .then((r) => !ignore && setRelated(r))
+      .catch(() => {});
+    getAdjacent(id)
+      .then((adj) => !ignore && setAdjacent(adj))
       .catch(() => {});
 
     if (!counted.has(id)) {
@@ -39,6 +45,31 @@ export default function Article() {
       ignore = true;
     };
   }, [id]);
+
+  useEffect(() => {
+    function handleKeyDown(e) {
+      const targetTag = e.target?.tagName;
+      const activeTag = document.activeElement?.tagName;
+      const isEditable =
+        e.target?.isContentEditable || document.activeElement?.isContentEditable;
+      if (
+        ['INPUT', 'TEXTAREA', 'SELECT'].includes(targetTag) ||
+        ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag) ||
+        isEditable
+      ) {
+        return;
+      }
+
+      if (e.key === 'ArrowLeft' && adjacent.prev) {
+        navigate(`/article/${adjacent.prev.id}`);
+      } else if (e.key === 'ArrowRight' && adjacent.next) {
+        navigate(`/article/${adjacent.next.id}`);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [adjacent, navigate]);
 
   if (error) {
     return (
@@ -54,7 +85,7 @@ export default function Article() {
 
   return (
     <div className="article-layout">
-      <article className="article-main">
+      <article className="article-main" key={article.id}>
         <nav className="breadcrumb" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
           <span>/</span>
@@ -91,10 +122,22 @@ export default function Article() {
         )}
 
         <div className="article-nav">
-          <button className="btn btn-outline" disabled title="Coming soon">
+          <button
+            className="btn btn-outline"
+            disabled={!adjacent.prev}
+            onClick={() => adjacent.prev && navigate(`/article/${adjacent.prev.id}`)}
+            title={adjacent.prev ? adjacent.prev.title : undefined}
+            aria-label="Previous story"
+          >
             <Icon name="chevron-left" size={16} /> Previous story
           </button>
-          <button className="btn btn-outline" disabled title="Coming soon">
+          <button
+            className="btn btn-outline"
+            disabled={!adjacent.next}
+            onClick={() => adjacent.next && navigate(`/article/${adjacent.next.id}`)}
+            title={adjacent.next ? adjacent.next.title : undefined}
+            aria-label="Next story"
+          >
             Next story <Icon name="chevron-right" size={16} />
           </button>
         </div>

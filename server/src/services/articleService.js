@@ -66,6 +66,26 @@ export function getRelated(all, article, limit = 4) {
     .slice(0, limit);
 }
 
+export function getAdjacent(all, article) {
+  const inCategory = all
+    .filter((a) => a.category === article.category)
+    .sort((a, b) => {
+      const diff = new Date(b.publishedAt) - new Date(a.publishedAt);
+      if (diff !== 0) return diff;
+      return a.id.localeCompare(b.id);
+    });
+
+  const idx = inCategory.findIndex((a) => a.id === article.id);
+  if (idx === -1) return { prev: null, next: null };
+
+  return {
+    prev: idx > 0 ? inCategory[idx - 1] : null,
+    next: idx < inCategory.length - 1 ? inCategory[idx + 1] : null,
+  };
+}
+
+export const getNeighbours = getAdjacent;
+
 export function categoryCounts(all) {
   return CATEGORIES.map((c) => ({
     ...c,

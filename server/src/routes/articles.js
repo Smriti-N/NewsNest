@@ -5,6 +5,7 @@ import {
   getTrending,
   getFeatured,
   getRelated,
+  getAdjacent,
   validateNewArticle,
 } from '../services/articleService.js';
 
@@ -64,6 +65,17 @@ router.get('/:id/related', async (req, res, next) => {
     const article = await store.getById(req.params.id);
     if (!article) return res.status(404).json({ error: 'Story not found' });
     res.json(getRelated(await store.getAll(), article));
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get(['/:id/adjacent', '/:id/neighbours'], async (req, res, next) => {
+  try {
+    const store = await getStore();
+    const article = await store.getById(req.params.id);
+    if (!article) return res.status(404).json({ error: 'Story not found' });
+    res.json(getAdjacent(await store.getAll(), article));
   } catch (err) {
     next(err);
   }
