@@ -1,11 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 
 export default function Navbar() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
   const [text, setText] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [dark]);
 
   function handleSearch(e) {
     e.preventDefault();
@@ -42,7 +54,7 @@ export default function Navbar() {
         <div className="nav-actions">
           <button
             className="icon-btn"
-            onClick={() => setDark(!dark)}
+            onClick={() => setDark((prev) => !prev)}
             aria-label="Toggle dark mode"
           >
             <Icon name={dark ? 'sun' : 'moon'} size={18} />
