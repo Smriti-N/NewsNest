@@ -13,8 +13,10 @@ export function filterByCategory(items, category) {
 
 export function searchArticles(items, q) {
   if (!q) return items;
-  const needle = q.trim();
-  return items.filter((a) => (a.title + ' ' + a.summary).includes(needle));
+  const needle = q.trim().toLowerCase();
+  return items.filter((a) => 
+    (a.title + ' ' + a.summary).toLowerCase().includes(needle)
+  );
 }
 
 export function sortArticles(items, sort = 'latest') {
