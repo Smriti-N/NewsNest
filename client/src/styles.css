@@ -17,6 +17,7 @@
 }
 
 [data-theme='dark'] {
+  color-scheme: dark;
   --bg: #0b0e1a;
   --card: #151a2e;
   --text: #eef1fb;
@@ -59,7 +60,6 @@ ul { margin: 0; padding-left: 1.2rem; }
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
-.navbar-dark { background: #080b16; color: #eef1fb; border-bottom-color: #1c2240; }
 .navbar-inner {
   max-width: 1160px; margin: 0 auto; padding: 12px 20px;
   display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
@@ -74,14 +74,11 @@ ul { margin: 0; padding-left: 1.2rem; }
 .nav-links a { color: var(--muted); font-weight: 600; font-size: 0.95rem; padding: 8px 12px; border-radius: 8px; }
 .nav-links a:hover { background: var(--accent-soft); color: var(--accent); }
 .nav-links a.active { color: var(--accent); background: var(--accent-soft); }
-.navbar-dark .nav-links a { color: #aab3d4; }
 .nav-search {
   display: flex; align-items: center; gap: 8px; flex: 1; min-width: 180px; max-width: 360px;
   margin-left: auto; padding: 0 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--muted);
 }
 .nav-search input { flex: 1; border: 0; background: transparent; padding: 10px 0; font: inherit; color: var(--text); outline: none; }
-.navbar-dark .nav-search { background: #131936; border-color: #252c48; }
-.navbar-dark .nav-search input { color: #eef1fb; }
 .nav-actions { display: flex; align-items: center; gap: 10px; }
 
 /* ---------- Buttons ---------- */

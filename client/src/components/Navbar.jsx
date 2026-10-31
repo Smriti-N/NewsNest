@@ -1,11 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 
+const THEME_KEY = 'newsnest:theme';
+
+function readTheme() {
+  try {
+    return localStorage.getItem(THEME_KEY) === 'dark';
+  } catch {
+    return false;
+  }
+}
+
 export default function Navbar() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(readTheme);
   const [text, setText] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    try {
+      localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
+    } catch {
+      // storage unavailable: the theme just won't be remembered
+    }
+  }, [dark]);
 
   function handleSearch(e) {
     e.preventDefault();
@@ -14,7 +33,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className={`navbar${dark ? ' navbar-dark' : ''}`}>
+    <header className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="brand" aria-label="NewsNest home">
           <span className="brand-mark">N</span>
