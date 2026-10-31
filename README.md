@@ -65,3 +65,16 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for how to fork, branch and open a pull 
 ## License
 
 [MIT](LICENSE)
+## Troubleshooting
+
+### 1. Port already in use (`EADDRINUSE: port 5000`)
+* **Symptom:** Server crashes immediately on start with `Error: listen EADDRINUSE: address already in use :::5000`.
+* **Fix:** Kill the process running on port 5000 with `npx kill-port 5000`. If using macOS, port 5000 is often claimed by AirPlay Receiver; turn it off in **System Settings → General → AirDrop & Handoff → AirPlay Receiver (toggle OFF)**.
+
+### 2. `sh: vite: command not found`
+* **Symptom:** Running `npm run dev` in the `client` directory fails with error code 127.
+* **Fix:** Dependencies have not been installed yet. Navigate into the folder and run `npm install` before starting Vite:
+  ```bash
+  cd client
+  npm install
+  npm run dev
