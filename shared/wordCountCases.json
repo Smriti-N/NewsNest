@@ -1,0 +1,10 @@
+[
+  { "name": "empty text", "text": "", "count": 0 },
+  { "name": "whitespace only", "text": " \t\n  ", "count": 0 },
+  { "name": "leading and trailing whitespace", "text": "  one two   ", "count": 2 },
+  { "name": "double spaces", "text": "one  two", "count": 2 },
+  { "name": "tabs", "text": "one\ttwo", "count": 2 },
+  { "name": "line breaks", "text": "one\ntwo", "count": 2 },
+  { "name": "punctuation stays in a word", "text": "don't stop", "count": 2 },
+  { "name": "non-breaking space", "text": "one\u00a0two", "count": 2 }
+]
