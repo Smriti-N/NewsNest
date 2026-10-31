@@ -22,7 +22,7 @@ export function sortArticles(items, sort = 'latest') {
     return [...items].sort((a, b) => b.views - a.views);
   }
   return [...items].sort(
-    (a, b) => new Date(a.publishedAt) - new Date(b.publishedAt)
+    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
   );
 }
 
