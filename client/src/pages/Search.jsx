@@ -6,6 +6,7 @@ import ArticleRow from '../components/ArticleRow.jsx';
 import Icon from '../components/Icon.jsx';
 
 const SUGGESTIONS = ['solar', 'school', 'cricket', 'robot', 'comet'];
+const DEBOUNCE_MS = 300;
 
 export default function Search() {
   const [params, setParams] = useSearchParams();
@@ -30,15 +31,28 @@ export default function Search() {
   }
 
   useEffect(() => {
+    // Wait until typing pauses, then cancel any request that is still running
+    // when the query changes, so a late answer for an old query is never shown.
+    const controller = new AbortController();
     setLoading(true);
     setError('');
-    getArticles({ q, category, sort, limit: 20 })
-      .then((res) => {
-        setResults(res.items);
-        setTotal(res.total);
-      })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+    const timer = setTimeout(() => {
+      getArticles({ q, category, sort, limit: 20 }, { signal: controller.signal })
+        .then((res) => {
+          setResults(res.items);
+          setTotal(res.total);
+          setLoading(false);
+        })
+        .catch((e) => {
+          if (e.name === 'AbortError') return;
+          setError(e.message);
+          setLoading(false);
+        });
+    }, DEBOUNCE_MS);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [q, category, sort]);
 
   return (
