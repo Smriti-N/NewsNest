@@ -8,6 +8,7 @@ import Article from './pages/Article.jsx';
 import Search from './pages/Search.jsx';
 import Saved from './pages/Saved.jsx';
 import Write from './pages/Write.jsx';
+import NotFound from './pages/NotFound.jsx';
 
 export default function App() {
   return (
@@ -23,7 +24,7 @@ export default function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/saved" element={<Saved />} />
           <Route path="/write" element={<Write />} />
-          {/* TODO: add a catch-all route for URLs that don't exist */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
