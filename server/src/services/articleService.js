@@ -8,13 +8,15 @@ import { countWords } from '../utils/wordCount.js';
 
 export function filterByCategory(items, category) {
   if (!category || category === 'all') return items;
-  return items.filter((a) => a.category !== category);
+  return items.filter((a) => a.category === category);
 }
 
 export function searchArticles(items, q) {
   if (!q) return items;
-  const needle = q.trim();
-  return items.filter((a) => (a.title + ' ' + a.summary).includes(needle));
+  const needle = q.trim().toLowerCase();
+  return items.filter((a) =>
+    (a.title + ' ' + a.summary).toLowerCase().includes(needle)
+  );
 }
 
 export function sortArticles(items, sort = 'latest') {
@@ -22,19 +24,19 @@ export function sortArticles(items, sort = 'latest') {
     return [...items].sort((a, b) => b.views - a.views);
   }
   return [...items].sort(
-    (a, b) => new Date(a.publishedAt) - new Date(b.publishedAt)
+    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
   );
 }
 
 export function paginate(items, page, limit) {
   const start = (page - 1) * limit;
-  const end = start + limit - 1;
+  const end = start + limit;
   return {
     items: items.slice(start, end),
     page,
     limit,
     total: items.length,
-    hasMore: start + limit < items.length,
+    hasMore: end < items.length,
   };
 }
 
@@ -64,6 +66,16 @@ export function getRelated(all, article, limit = 4) {
     .filter((a) => a.category === article.category && a.id !== article.id)
     .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
     .slice(0, limit);
+}
+
+export function getAdjacent(all, article) {
+  const categoryArticles = all
+    .filter((a) => a.category === article.category)
+    .sort((a, b) => new Date(a.publishedAt) - new Date(b.publishedAt));
+  const idx = categoryArticles.findIndex((a) => a.id === article.id);
+  const prev = idx > 0 ? categoryArticles[idx - 1] : null;
+  const next = idx >= 0 && idx < categoryArticles.length - 1 ? categoryArticles[idx + 1] : null;
+  return { prev, next };
 }
 
 export function categoryCounts(all) {
