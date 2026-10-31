@@ -3,6 +3,7 @@ import cors from 'cors';
 import articlesRouter from './routes/articles.js';
 import { getStore } from './store/index.js';
 import { categoryCounts } from './services/articleService.js';
+import articleRateLimiter from './middleware/articleRateLimit.js';
 
 const app = express();
 
@@ -28,7 +29,7 @@ app.get('/api/categories', async (req, res, next) => {
   }
 });
 
-app.use('/api/articles', articlesRouter);
+app.use('/api/articles', articleRateLimiter, articlesRouter);
 
 app.use('/api', (req, res) => {
   res.status(404).json({ error: 'Not found' });
