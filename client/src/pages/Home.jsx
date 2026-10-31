@@ -62,7 +62,22 @@ export default function Home() {
         </div>
         <CategoryChips active={category} onChange={setCategory} />
 
-        {/* TODO: show a loading indicator here while `loading` is true */}
+        {loading && (
+          <div className="grid skeleton-grid" role="status" aria-label="Loading latest stories">
+            {Array.from({ length: PAGE_SIZE }, (_, index) => (
+              <div className="card skeleton-card" key={index} aria-hidden="true">
+                <div className="skeleton-shimmer skeleton-media" />
+                <div className="skeleton-card-body">
+                  <span className="skeleton-shimmer skeleton-title" />
+                  <span className="skeleton-shimmer skeleton-line" />
+                  <span className="skeleton-shimmer skeleton-line skeleton-line-medium" />
+                  <span className="skeleton-shimmer skeleton-line skeleton-line-short" />
+                  <span className="skeleton-shimmer skeleton-meta" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {error && <p className="notice notice-error">{error}</p>}
 
