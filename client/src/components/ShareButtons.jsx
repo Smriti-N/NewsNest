@@ -7,8 +7,13 @@ export default function ShareButtons({ id, title }) {
   const u = encodeURIComponent(url);
   const t = encodeURIComponent(title);
 
-  function copyLink() {
-    // TODO: copy `url` to the clipboard and show a toast
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast('Link copied', 'success');
+    } catch {
+      toast('Failed to copy link', 'error');
+    }
   }
 
   return (
