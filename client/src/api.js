@@ -25,6 +25,8 @@ export const getFeatured = () => request('/articles/featured');
 export const getTrending = (limit = 5) => request(`/articles/trending?limit=${limit}`);
 export const getArticle = (id) => request(`/articles/${id}`);
 export const getRelated = (id) => request(`/articles/${id}/related`);
+export const getAdjacent = (id) => request(`/articles/${id}/adjacent`);
+export const getNeighbours = getAdjacent;
 export const recordView = (id) => request(`/articles/${id}/view`, { method: 'POST' });
 export const getCategories = () => request('/categories');
 

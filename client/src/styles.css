@@ -247,6 +247,8 @@ ul { margin: 0; padding-left: 1.2rem; }
 .article-summary { font-size: 1.2rem; line-height: 1.7; margin: 0 0 24px; max-width: 62ch; }
 
 .article-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); }
+.article-main { animation: articleFade 0.22s ease-out; }
+@keyframes articleFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ---------- Search ---------- */
 .search-bar { display: flex; align-items: center; gap: 10px; padding: 0 16px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); color: var(--muted); }
@@ -329,6 +331,6 @@ ul { margin: 0; padding-left: 1.2rem; }
   .footer-grid { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ticker-track, .hero-empty, .hero-slide, .toast { animation: none; }
+  .ticker-track, .hero-empty, .hero-slide, .toast, .article-main { animation: none; }
   .card, .btn, .tile { transition: none; }
 }
