@@ -85,7 +85,9 @@ export function validateNewArticle(body = {}) {
 
   if (!summary) errors.push('Summary is required.');
   else if (countWords(summary) > MAX_WORDS)
-    errors.push(`Summary must be ${MAX_WORDS} words or fewer.`);
+    errors.push(
+      `Summary must be ${MAX_WORDS} words or fewer (it has ${countWords(summary)}).`
+    );
 
   if (!CATEGORY_SLUGS.includes(category)) errors.push('Pick a valid category.');
 
