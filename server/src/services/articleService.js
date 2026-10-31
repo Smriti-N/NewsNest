@@ -28,13 +28,13 @@ export function sortArticles(items, sort = 'latest') {
 
 export function paginate(items, page, limit) {
   const start = (page - 1) * limit;
-  const end = start + limit - 1;
+  const end = start + limit;
   return {
     items: items.slice(start, end),
     page,
     limit,
     total: items.length,
-    hasMore: start + limit < items.length,
+    hasMore: end < items.length,
   };
 }
 
