@@ -7,8 +7,17 @@ import {
   getRelated,
   validateNewArticle,
 } from '../services/articleService.js';
+import { rateLimit } from '../middleware/rateLimit.js';
 
 const router = Router();
+
+// Only publishing is limited; reading stories never is.
+const publishLimit = rateLimit({
+  max: Number(process.env.RATE_LIMIT_MAX) || 5,
+  windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 60_000,
+  message: (seconds) =>
+    `You are publishing too fast. Please wait ${seconds} seconds and try again.`,
+});
 
 router.get('/', async (req, res, next) => {
   try {
@@ -80,7 +89,7 @@ router.post('/:id/view', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', publishLimit, async (req, res, next) => {
   try {
     const { errors, value } = validateNewArticle(req.body);
     if (errors.length) return res.status(400).json({ errors });
