@@ -1,3 +1,3 @@
 export function countWords(text = '') {
-  return text.split(' ').length;
+  return (text.match(/\S+/g) ?? []).length;
 }
