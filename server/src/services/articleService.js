@@ -8,27 +8,30 @@ import { countWords } from '../utils/wordCount.js';
 
 export function filterByCategory(items, category) {
   if (!category || category === 'all') return items;
-  return items.filter((a) => a.category !== category);
+  return items.filter((a) => a.category === category); // yha pe change hua h
 }
 
 export function searchArticles(items, q) {
   if (!q) return items;
-  const needle = q.trim();
-  return items.filter((a) => (a.title + ' ' + a.summary).includes(needle));
+  const needle = q.trim().toLowerCase();
+  return items.filter((a) =>
+    (a.title + ' ' + a.summary).toLowerCase().includes(needle)
+  );
 }
 
 export function sortArticles(items, sort = 'latest') {
   if (sort === 'popular') {
-    return [...items].sort((a, b) => b.views - a.views);
+    return [...items].sort((a, b) => (b.views || 0) - (a.views || 0));
   }
+  // Sort descending by publication date (newest first)
   return [...items].sort(
-    (a, b) => new Date(a.publishedAt) - new Date(b.publishedAt)
+    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
   );
 }
 
 export function paginate(items, page, limit) {
   const start = (page - 1) * limit;
-  const end = start + limit - 1;
+  const end = start + limit;
   return {
     items: items.slice(start, end),
     page,
@@ -49,7 +52,7 @@ export function listArticles(
 }
 
 export function getTrending(all, limit = 5) {
-  return [...all].sort((a, b) => b.views - a.views).slice(0, limit);
+  return [...all].sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, limit);
 }
 
 export function getFeatured(all, limit = 5) {
