@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { getArticle, getRelated, recordView } from '../api.js';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { getArticle, getNeighbors, getRelated, recordView } from '../api.js';
 import Thumb from '../components/Thumb.jsx';
 import Icon from '../components/Icon.jsx';
 import BookmarkButton from '../components/BookmarkButton.jsx';
@@ -10,11 +10,14 @@ import { categoryName } from '../utils/categories.js';
 import { formatDate, formatViews, readTime } from '../utils/format.js';
 
 const counted = new Set();
+const NO_NEIGHBORS = { previous: null, next: null };
 
 export default function Article() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [article, setArticle] = useState(null);
   const [related, setRelated] = useState([]);
+  const [neighbors, setNeighbors] = useState(NO_NEIGHBORS);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -22,6 +25,7 @@ export default function Article() {
     window.scrollTo(0, 0);
     setArticle(null);
     setRelated([]);
+    setNeighbors(NO_NEIGHBORS);
     setError('');
 
     getArticle(id)
@@ -29,6 +33,9 @@ export default function Article() {
       .catch((e) => !ignore && setError(e.message));
     getRelated(id)
       .then((r) => !ignore && setRelated(r))
+      .catch(() => {});
+    getNeighbors(id)
+      .then((n) => !ignore && setNeighbors(n))
       .catch(() => {});
 
     if (!counted.has(id)) {
@@ -39,6 +46,19 @@ export default function Article() {
       ignore = true;
     };
   }, [id]);
+
+  // Left and right arrow keys move between stories, except while typing.
+  useEffect(() => {
+    function onKey(e) {
+      if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      const el = e.target;
+      if (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName)) return;
+      const target = e.key === 'ArrowLeft' ? neighbors.previous : e.key === 'ArrowRight' ? neighbors.next : null;
+      if (target) navigate(`/article/${target.id}`);
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [neighbors, navigate]);
 
   if (error) {
     return (
@@ -91,12 +111,24 @@ export default function Article() {
         )}
 
         <div className="article-nav">
-          <button className="btn btn-outline" disabled title="Coming soon">
-            <Icon name="chevron-left" size={16} /> Previous story
-          </button>
-          <button className="btn btn-outline" disabled title="Coming soon">
-            Next story <Icon name="chevron-right" size={16} />
-          </button>
+          {neighbors.previous ? (
+            <Link className="btn btn-outline" to={`/article/${neighbors.previous.id}`} title={neighbors.previous.title}>
+              <Icon name="chevron-left" size={16} /> Previous story
+            </Link>
+          ) : (
+            <button className="btn btn-outline" disabled title="This is the first story in this category">
+              <Icon name="chevron-left" size={16} /> Previous story
+            </button>
+          )}
+          {neighbors.next ? (
+            <Link className="btn btn-outline" to={`/article/${neighbors.next.id}`} title={neighbors.next.title}>
+              Next story <Icon name="chevron-right" size={16} />
+            </Link>
+          ) : (
+            <button className="btn btn-outline" disabled title="This is the latest story in this category">
+              Next story <Icon name="chevron-right" size={16} />
+            </button>
+          )}
         </div>
       </article>
 

@@ -98,3 +98,18 @@ export function validateNewArticle(body = {}) {
   };
   return { errors, value };
 }
+
+// The stories just before and after `article` in its category, ordered by
+// publish time (oldest first). Either side is null at the ends of the list.
+export function getNeighbors(all, article) {
+  const list = all
+    .filter((a) => a.category === article.category)
+    .sort(
+      (a, b) =>
+        new Date(a.publishedAt) - new Date(b.publishedAt) ||
+        String(a.id).localeCompare(String(b.id))
+    );
+  const i = list.findIndex((a) => a.id === article.id);
+  const pick = (a) => (a ? { id: a.id, title: a.title } : null);
+  return { previous: pick(list[i - 1]), next: pick(list[i + 1]) };
+}
