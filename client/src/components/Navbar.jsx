@@ -1,4 +1,10 @@
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
+useEffect(() => {
+  document.documentElement.setAttribute(
+    'data-theme',
+    dark ? 'dark' : 'light'
+  );
+}, [dark]);
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 
