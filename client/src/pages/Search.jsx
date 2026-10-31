@@ -30,15 +30,36 @@ export default function Search() {
   }
 
   useEffect(() => {
+    // Show "Searching..." straight away so the old count / "No stories match"
+    // message never sits next to text it doesn't belong to.
     setLoading(true);
     setError('');
-    getArticles({ q, category, sort, limit: 20 })
-      .then((res) => {
-        setResults(res.items);
-        setTotal(res.total);
-      })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    // Debounce: wait 300 ms after the last change before calling the API.
+    const timer = setTimeout(() => {
+      getArticles({ q, category, sort, limit: 20, signal })
+        .then((res) => {
+          if (signal.aborted) return; // a newer request replaced this one
+          setResults(res.items);
+          setTotal(res.total);
+          setLoading(false);
+        })
+        .catch((e) => {
+          if (signal.aborted || e.name === 'AbortError') return;
+          setError(e.message);
+          setLoading(false);
+        });
+    }, 300);
+
+    // Runs when q/category/sort change again (or on unmount):
+    // cancel the pending timer and the in-flight request.
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [q, category, sort]);
 
   return (
