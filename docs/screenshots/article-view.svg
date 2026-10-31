@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" style="background:#0e1326; font-family:system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2f5bff"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Browser Chrome Header -->
+  <rect width="1200" height="42" fill="#13182c"/>
+  <circle cx="25" cy="21" r="6" fill="#ff5f56"/>
+  <circle cx="45" cy="21" r="6" fill="#ffbd2e"/>
+  <circle cx="65" cy="21" r="6" fill="#27c93f"/>
+  <rect x="250" y="8" width="700" height="26" rx="6" fill="#1e2540"/>
+  <text x="600" y="25" fill="#8896be" font-size="12" text-anchor="middle">http://localhost:5173/article/a1 — Metro line linking airport and old town opens</text>
+
+  <!-- App Header / Navbar -->
+  <rect y="42" width="1200" height="70" fill="#171d36" stroke="#252c4a" stroke-width="1"/>
+  <rect x="50" y="58" width="38" height="38" rx="10" fill="url(#brandGrad)"/>
+  <text x="69" y="83" fill="#ffffff" font-size="20" font-weight="bold" text-anchor="middle">N</text>
+  <text x="100" y="83" fill="#ffffff" font-size="22" font-weight="800">News<tspan fill="#7b93ff">Nest</tspan></text>
+  <text x="260" y="82" fill="#9aa3c2" font-size="15">Home</text>
+  <text x="340" y="82" fill="#9aa3c2" font-size="15">Categories</text>
+  <text x="450" y="82" fill="#9aa3c2" font-size="15">Top News</text>
+  <text x="550" y="82" fill="#9aa3c2" font-size="15">Saved</text>
+
+  <!-- Main Article View Container -->
+  <rect x="180" y="140" width="840" height="340" rx="16" fill="#171d36" stroke="#2b3658" stroke-width="1"/>
+  
+  <!-- Back Button & Breadcrumb -->
+  <text x="180" y="125" fill="#7b93ff" font-size="14">← Back to home</text>
+
+  <!-- Article Meta Badges -->
+  <rect x="220" y="175" width="70" height="26" rx="6" fill="#2f5bff"/>
+  <text x="255" y="192" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">INDIA</text>
+  <text x="305" y="192" fill="#8896be" font-size="13">• Published 5 hours ago • Source: Riverton Times</text>
+
+  <!-- Bookmark & Share Row -->
+  <rect x="910" y="172" width="85" height="32" rx="8" fill="#1e2750" stroke="#374375"/>
+  <text x="952" y="193" fill="#7b93ff" font-size="13" font-weight="bold" text-anchor="middle">🔖 Save</text>
+
+  <!-- Headline -->
+  <text x="220" y="245" fill="#ffffff" font-size="28" font-weight="800">Metro line linking airport and old town opens</text>
+
+  <!-- 50-Word Summary Box -->
+  <rect x="220" y="270" width="760" height="120" rx="10" fill="#121729"/>
+  <text x="245" y="305" fill="#e2e8f0" font-size="16" line-height="1.6">Riverton's long-awaited Metro line connecting the airport to the old town opened</text>
+  <text x="245" y="335" fill="#e2e8f0" font-size="16">to commuters on Monday. Officials expect 80,000 daily riders, with trains every six</text>
+  <text x="245" y="365" fill="#e2e8f0" font-size="16">minutes at peak hours. Tickets can be bought through a new mobile app or at station kiosks.</text>
+
+  <!-- Reading metrics & External Link -->
+  <text x="220" y="425" fill="#8896be" font-size="14">📏 Length: <tspan fill="#7b93ff" font-weight="bold">42 words</tspan> (under 50-word limit) • 👁 <tspan fill="#7b93ff" font-weight="bold">8,421 views</tspan></text>
+  <rect x="220" y="445" width="220" height="38" rx="8" fill="#2f5bff"/>
+  <text x="330" y="469" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">Read Full Story at Source ↗</text>
+
+  <!-- Related Stories Section -->
+  <text x="180" y="525" fill="#ffffff" font-size="20" font-weight="bold">Related Stories in India</text>
+  
+  <rect x="180" y="545" width="405" height="150" rx="12" fill="#171d36" stroke="#2a3354"/>
+  <rect x="200" y="565" width="60" height="20" rx="4" fill="#23305a"/>
+  <text x="230" y="579" fill="#7b93ff" font-size="10" font-weight="bold" text-anchor="middle">INDIA</text>
+  <text x="200" y="605" fill="#ffffff" font-size="15" font-weight="bold">Village school wins award for solar</text>
+  <text x="200" y="630" fill="#a0aec0" font-size="13">A government school in Ashgrove moves classrooms...</text>
+  <text x="200" y="670" fill="#718096" font-size="12">26 hours ago • 2,310 views</text>
+
+  <rect x="615" y="545" width="405" height="150" rx="12" fill="#171d36" stroke="#2a3354"/>
+  <rect x="635" y="565" width="60" height="20" rx="4" fill="#23305a"/>
+  <text x="665" y="579" fill="#7b93ff" font-size="10" font-weight="bold" text-anchor="middle">INDIA</text>
+  <text x="635" y="605" fill="#ffffff" font-size="15" font-weight="bold">Farmers adopt phone-based weather alerts</text>
+  <text x="635" y="630" fill="#a0aec0" font-size="13">Thousands of farmers receive free rainfall alerts...</text>
+  <text x="635" y="670" fill="#718096" font-size="12">2 days ago • 1,650 views</text>
+</svg>

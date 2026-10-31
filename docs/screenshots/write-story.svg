@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" style="background:#0e1326; font-family:system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2f5bff"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Browser Chrome Header -->
+  <rect width="1200" height="42" fill="#13182c"/>
+  <circle cx="25" cy="21" r="6" fill="#ff5f56"/>
+  <circle cx="45" cy="21" r="6" fill="#ffbd2e"/>
+  <circle cx="65" cy="21" r="6" fill="#27c93f"/>
+  <rect x="250" y="8" width="700" height="26" rx="6" fill="#1e2540"/>
+  <text x="600" y="25" fill="#8896be" font-size="12" text-anchor="middle">http://localhost:5173/write — NewsNest | Write a Story</text>
+
+  <!-- Navbar -->
+  <rect y="42" width="1200" height="70" fill="#171d36" stroke="#252c4a" stroke-width="1"/>
+  <rect x="50" y="58" width="38" height="38" rx="10" fill="url(#brandGrad)"/>
+  <text x="69" y="83" fill="#ffffff" font-size="20" font-weight="bold" text-anchor="middle">N</text>
+  <text x="100" y="83" fill="#ffffff" font-size="22" font-weight="800">News<tspan fill="#7b93ff">Nest</tspan></text>
+  <text x="260" y="82" fill="#9aa3c2" font-size="15">Home</text>
+  <text x="340" y="82" fill="#9aa3c2" font-size="15">Categories</text>
+  <text x="450" y="82" fill="#9aa3c2" font-size="15">Top News</text>
+  <text x="550" y="82" fill="#9aa3c2" font-size="15">Saved</text>
+
+  <!-- Header Title -->
+  <text x="70" y="160" fill="#ffffff" font-size="26" font-weight="800">Write a 50-Word Story</text>
+  <text x="70" y="185" fill="#8896be" font-size="14">Distill complex news into exactly 50 words or fewer for our readers.</text>
+
+  <!-- Left Column: Form -->
+  <rect x="70" y="210" width="560" height="500" rx="14" fill="#171d36" stroke="#2a3356" stroke-width="1"/>
+
+  <!-- Field: Title -->
+  <text x="95" y="240" fill="#cbd5e1" font-size="13" font-weight="bold">HEADLINE</text>
+  <rect x="95" y="250" width="510" height="42" rx="8" fill="#101528" stroke="#2a3458"/>
+  <text x="110" y="276" fill="#ffffff" font-size="14">Next-gen quantum processor handles room-temp computations</text>
+
+  <!-- Field: Category & Source -->
+  <text x="95" y="318" fill="#cbd5e1" font-size="13" font-weight="bold">CATEGORY</text>
+  <rect x="95" y="328" width="245" height="42" rx="8" fill="#101528" stroke="#2a3458"/>
+  <text x="110" y="354" fill="#ffffff" font-size="14">Technology ▼</text>
+
+  <text x="360" y="318" fill="#cbd5e1" font-size="13" font-weight="bold">SOURCE / PUBLISHER</text>
+  <rect x="360" y="328" width="245" height="42" rx="8" fill="#101528" stroke="#2a3458"/>
+  <text x="375" y="354" fill="#ffffff" font-size="14">Tech Horizon</text>
+
+  <!-- Field: Summary & Word Counter -->
+  <text x="95" y="398" fill="#cbd5e1" font-size="13" font-weight="bold">50-WORD SUMMARY</text>
+  
+  <!-- Live Word Counter Badge -->
+  <rect x="490" y="385" width="115" height="24" rx="12" fill="#138a55"/>
+  <text x="547" y="401" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">✓ 38 / 50 words</text>
+
+  <rect x="95" y="415" width="510" height="135" rx="8" fill="#101528" stroke="#138a55" stroke-width="1.5"/>
+  <text x="110" y="445" fill="#ffffff" font-size="14">Physicists announced a breakthrough optical qubit architecture operating</text>
+  <text x="110" y="470" fill="#ffffff" font-size="14">at standard ambient temperatures. The system achieved error correction without</text>
+  <text x="110" y="495" fill="#ffffff" font-size="14">sub-zero helium cooling tanks, slashing deployment infrastructure costs by eighty</text>
+  <text x="110" y="520" fill="#ffffff" font-size="14">percent across commercial server installations.</text>
+
+  <!-- Source URL -->
+  <text x="95" y="575" fill="#cbd5e1" font-size="13" font-weight="bold">ORIGINAL STORY URL</text>
+  <rect x="95" y="585" width="510" height="42" rx="8" fill="#101528" stroke="#2a3458"/>
+  <text x="110" y="611" fill="#8896be" font-size="14">https://example.com/quantum-breakthrough</text>
+
+  <!-- Submit Button -->
+  <rect x="95" y="645" width="510" height="46" rx="8" fill="url(#brandGrad)"/>
+  <text x="350" y="674" fill="#ffffff" font-size="15" font-weight="bold" text-anchor="middle">Publish 50-Word Story</text>
+
+  <!-- Right Column: Live Card Preview -->
+  <text x="670" y="240" fill="#8896be" font-size="14" font-weight="bold">LIVE PREVIEW</text>
+  
+  <rect x="670" y="260" width="460" height="280" rx="14" fill="#171d36" stroke="#2a3356" stroke-width="1"/>
+  <rect x="695" y="285" width="95" height="24" rx="4" fill="#23305a"/>
+  <text x="742" y="301" fill="#7b93ff" font-size="11" font-weight="bold" text-anchor="middle">TECHNOLOGY</text>
+  <text x="805" y="301" fill="#8896be" font-size="12">Just now • Tech Horizon</text>
+
+  <text x="695" y="345" fill="#ffffff" font-size="18" font-weight="bold">Next-gen quantum processor handles room-temp</text>
+  <text x="695" y="370" fill="#ffffff" font-size="18" font-weight="bold">computations</text>
+
+  <text x="695" y="410" fill="#a0aec0" font-size="14">Physicists announced a breakthrough optical qubit</text>
+  <text x="695" y="435" fill="#a0aec0" font-size="14">architecture operating at standard ambient temperatures...</text>
+
+  <line x1="695" y1="480" x2="1100" y2="480" stroke="#283252" stroke-width="1"/>
+  <text x="695" y="510" fill="#718096" font-size="12">38 words • 0 views</text>
+  <text x="1070" y="510" fill="#7b93ff" font-size="16">🔖</text>
+</svg>

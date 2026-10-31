@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" style="background:#0e1326; font-family:system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2f5bff"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Browser Chrome Header -->
+  <rect width="1200" height="42" fill="#13182c"/>
+  <circle cx="25" cy="21" r="6" fill="#ff5f56"/>
+  <circle cx="45" cy="21" r="6" fill="#ffbd2e"/>
+  <circle cx="65" cy="21" r="6" fill="#27c93f"/>
+  <rect x="250" y="8" width="700" height="26" rx="6" fill="#1e2540"/>
+  <text x="600" y="25" fill="#8896be" font-size="12" text-anchor="middle">http://localhost:5173/categories — NewsNest | Categories</text>
+
+  <!-- Navbar -->
+  <rect y="42" width="1200" height="70" fill="#171d36" stroke="#252c4a" stroke-width="1"/>
+  <rect x="50" y="58" width="38" height="38" rx="10" fill="url(#brandGrad)"/>
+  <text x="69" y="83" fill="#ffffff" font-size="20" font-weight="bold" text-anchor="middle">N</text>
+  <text x="100" y="83" fill="#ffffff" font-size="22" font-weight="800">News<tspan fill="#7b93ff">Nest</tspan></text>
+  <text x="260" y="82" fill="#9aa3c2" font-size="15">Home</text>
+  <text x="340" y="82" fill="#7b93ff" font-size="15" font-weight="bold">Categories</text>
+  <rect x="335" y="96" width="75" height="3" rx="1.5" fill="#7b93ff"/>
+  <text x="450" y="82" fill="#9aa3c2" font-size="15">Top News</text>
+  <text x="550" y="82" fill="#9aa3c2" font-size="15">Saved</text>
+
+  <!-- Title & Description -->
+  <text x="70" y="155" fill="#ffffff" font-size="26" font-weight="800">Explore by Category</text>
+  <text x="70" y="180" fill="#8896be" font-size="14">Browse stories curated across nine dedicated topics.</text>
+
+  <!-- 3x3 Category Tiles Grid -->
+  <!-- Row 1 -->
+  <rect x="70" y="210" width="340" height="110" rx="12" fill="#171d36" stroke="#2b3658"/>
+  <text x="95" y="250" fill="#7b93ff" font-size="22">💻</text>
+  <text x="135" y="250" fill="#ffffff" font-size="18" font-weight="bold">Technology</text>
+  <text x="135" y="275" fill="#8896be" font-size="13">4 stories</text>
+
+  <rect x="430" y="210" width="340" height="110" rx="12" fill="#171d36" stroke="#2b3658"/>
+  <text x="455" y="250" fill="#7b93ff" font-size="22">💼</text>
+  <text x="495" y="250" fill="#ffffff" font-size="18" font-weight="bold">Business</text>
+  <text x="495" y="275" fill="#8896be" font-size="13">3 stories</text>
+
+  <rect x="790" y="210" width="340" height="110" rx="12" fill="#171d36" stroke="#2b3658"/>
+  <text x="815" y="250" fill="#7b93ff" font-size="22">⚽</text>
+  <text x="855" y="250" fill="#ffffff" font-size="18" font-weight="bold">Sports</text>
+  <text x="855" y="275" fill="#8896be" font-size="13">3 stories</text>
+
+  <!-- Row 2 -->
+  <rect x="70" y="340" width="340" height="110" rx="12" fill="#171d36" stroke="#2b3658"/>
+  <text x="95" y="380" fill="#7b93ff" font-size="22">🏛️</text>
+  <text x="135" y="380" fill="#ffffff" font-size="18" font-weight="bold">Politics</text>
+  <text x="135" y="405" fill="#8896be" font-size="13">2 stories</text>
+
+  <rect x="430" y="340" width="340" height="110" rx="12" fill="#171d36" stroke="#2b3658"/>
+  <text x="455" y="380" fill="#7b93ff" font-size="22">🩺</text>
+  <text x="495" y="380" fill="#ffffff" font-size="18" font-weight="bold">Health</text>
+  <text x="495" y="405" fill="#8896be" font-size="13">3 stories</text>
+
+  <rect x="790" y="340" width="340" height="110" rx="12" fill="#171d36" stroke="#2b3658"/>
+  <text x="815" y="380" fill="#7b93ff" font-size="22">🔬</text>
+  <text x="855" y="380" fill="#ffffff" font-size="18" font-weight="bold">Science</text>
+  <text x="855" y="405" fill="#8896be" font-size="13">3 stories</text>
+
+  <!-- Row 3 -->
+  <rect x="70" y="470" width="340" height="110" rx="12" fill="#171d36" stroke="#2b3658"/>
+  <text x="95" y="510" fill="#7b93ff" font-size="22">🎬</text>
+  <text x="135" y="510" fill="#ffffff" font-size="18" font-weight="bold">Entertainment</text>
+  <text x="135" y="535" fill="#8896be" font-size="13">2 stories</text>
+
+  <rect x="430" y="470" width="340" height="110" rx="12" fill="#171d36" stroke="#2b3658"/>
+  <text x="455" y="510" fill="#7b93ff" font-size="22">🌍</text>
+  <text x="495" y="510" fill="#ffffff" font-size="18" font-weight="bold">World</text>
+  <text x="495" y="535" fill="#8896be" font-size="13">4 stories</text>
+
+  <rect x="790" y="470" width="340" height="110" rx="12" fill="#171d36" stroke="#2b3658"/>
+  <text x="815" y="510" fill="#7b93ff" font-size="22">🇮🇳</text>
+  <text x="855" y="510" fill="#ffffff" font-size="18" font-weight="bold">India</text>
+  <text x="855" y="535" fill="#8896be" font-size="13">4 stories</text>
+
+  <!-- Filter & Search Summary Bar below -->
+  <rect x="70" y="605" width="1060" height="90" rx="12" fill="#121729" stroke="#252d4a"/>
+  <text x="100" y="642" fill="#ffffff" font-size="16" font-weight="bold">Search &amp; Filter Capabilities</text>
+  <text x="100" y="668" fill="#8896be" font-size="13">Filter articles by category, sort by "Latest" or "Popular" (view counts), and search instantly across titles &amp; 50-word summaries.</text>
+</svg>
