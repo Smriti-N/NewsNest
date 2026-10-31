@@ -14,13 +14,11 @@ export default function useBookmarks() {
   const [ids, setIds] = useState(read);
 
   function toggle(id) {
-    if (ids.includes(id)) {
-      ids.splice(ids.indexOf(id), 1);
-    } else {
-      ids.push(id);
-    }
-    localStorage.setItem(KEY, JSON.stringify(ids));
-    setIds(ids);
+    const next = ids.includes(id)
+      ? ids.filter((item) => item !== id)
+      : [...ids, id];
+    localStorage.setItem(KEY, JSON.stringify(next));
+    setIds(next);
   }
 
   function clear() {
