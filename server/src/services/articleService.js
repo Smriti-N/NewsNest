@@ -8,7 +8,7 @@ import { countWords } from '../utils/wordCount.js';
 
 export function filterByCategory(items, category) {
   if (!category || category === 'all') return items;
-  return items.filter((a) => a.category !== category);
+  return items.filter((a) => a.category === category);
 }
 
 export function searchArticles(items, q) {
