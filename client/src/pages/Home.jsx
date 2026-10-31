@@ -24,6 +24,7 @@ export default function Home() {
     getArticles({ category, sort: 'latest', page: 1, limit: PAGE_SIZE })
       .then((res) => {
         if (ignore) return;
+        console.log('Latest news order:', res.items.map(a => a.title));
         setItems(res.items);
         setHasMore(res.hasMore);
         setPage(1);
