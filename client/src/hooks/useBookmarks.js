@@ -14,13 +14,15 @@ export default function useBookmarks() {
   const [ids, setIds] = useState(read);
 
   function toggle(id) {
-    if (ids.includes(id)) {
-      ids.splice(ids.indexOf(id), 1);
-    } else {
-      ids.push(id);
-    }
-    localStorage.setItem(KEY, JSON.stringify(ids));
-    setIds(ids);
+    setIds((prevIds) => {
+      const exists = prevIds.includes(id);
+      const nextIds = exists
+        ? prevIds.filter((item) => item !== id)
+        : [...prevIds, id];
+
+      localStorage.setItem(KEY, JSON.stringify(nextIds));
+      return nextIds;
+    });
   }
 
   function clear() {
