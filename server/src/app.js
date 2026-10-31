@@ -30,7 +30,8 @@ app.get('/api/categories', async (req, res, next) => {
 
 app.use('/api/articles', articlesRouter);
 
-app.use('/api', (req, res) => {
+// Catch-all 404 handler
+app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
