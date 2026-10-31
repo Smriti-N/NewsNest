@@ -42,7 +42,11 @@ export default function Write() {
       toast('Your story is live', 'success');
       navigate(`/article/${created.id}`);
     } catch (err) {
-      setError(err.message);
+      setError(
+        err.status === 429
+          ? 'You have published several stories recently. Please wait a moment and try again.'
+          : err.message
+      );
     } finally {
       setSending(false);
     }
