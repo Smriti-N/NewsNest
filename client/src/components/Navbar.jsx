@@ -1,11 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 
+const THEME_KEY = 'newsnest:theme';
+
+function getInitialTheme() {
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved) return saved === 'dark';
+  } catch {
+    // Ignore localStorage access restrictions
+  }
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+}
+
 export default function Navbar() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(getInitialTheme);
   const [text, setText] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      try {
+        localStorage.setItem(THEME_KEY, 'dark');
+      } catch {}
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      try {
+        localStorage.setItem(THEME_KEY, 'light');
+      } catch {}
+    }
+  }, [dark]);
 
   function handleSearch(e) {
     e.preventDefault();
@@ -42,8 +68,9 @@ export default function Navbar() {
         <div className="nav-actions">
           <button
             className="icon-btn"
-            onClick={() => setDark(!dark)}
-            aria-label="Toggle dark mode"
+            onClick={() => setDark((prev) => !prev)}
+            aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             <Icon name={dark ? 'sun' : 'moon'} size={18} />
           </button>
