@@ -1,17 +1,20 @@
-import { useState , useEffect } from 'react';
-useEffect(() => {
-  document.documentElement.setAttribute(
-    'data-theme',
-    dark ? 'dark' : 'light'
-  );
-}, [dark]);
+import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 
+
 export default function Navbar() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(
+  () => localStorage.getItem('theme') === 'dark'
+);
   const [text, setText] = useState('');
   const navigate = useNavigate();
+  useEffect(() => {
+  const theme = dark ? 'dark' : 'light';
+
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+}, [dark]);
 
   function handleSearch(e) {
     e.preventDefault();
