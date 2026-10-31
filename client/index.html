@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="NewsNest: the news in 50 words or fewer." />
     <title>NewsNest - the news in 50 words</title>
+    <script>
+      // Apply the saved theme before the page paints, so there is no light flash.
+      try {
+        if (localStorage.getItem('theme') === 'dark') {
+          document.documentElement.dataset.theme = 'dark';
+          document.documentElement.style.colorScheme = 'dark';
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
