@@ -4,6 +4,7 @@ import { createArticle } from '../api.js';
 import useCategories from '../hooks/useCategories.js';
 import ArticleCard from '../components/ArticleCard.jsx';
 import { useToast } from '../context/ToastContext.jsx';
+import { countWords } from '../utils/wordCount.js';
 
 const MAX_WORDS = 50;
 
@@ -25,8 +26,9 @@ export default function Write() {
     window.scrollTo(0, 0);
   }, []);
 
-  const count = form.summary.match(/\w+/g)?.length ?? 0;
+  const count = countWords(form.summary);
   const tooLong = count > MAX_WORDS;
+  const summaryInvalid = !form.summary.trim() || tooLong;
   const percent = Math.min(100, (count / MAX_WORDS) * 100);
 
   function update(field) {
@@ -102,7 +104,7 @@ export default function Write() {
             <input type="url" value={form.url} onChange={update('url')} placeholder="https://" />
           </label>
 
-          <button className="btn btn-primary" type="submit" disabled={sending || tooLong}>
+          <button className="btn btn-primary" type="submit" disabled={sending || summaryInvalid}>
             {sending ? 'Publishing...' : 'Publish story'}
           </button>
         </form>
