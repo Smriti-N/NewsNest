@@ -62,7 +62,34 @@ export default function Home() {
         </div>
         <CategoryChips active={category} onChange={setCategory} />
 
-        {/* TODO: show a loading indicator here while `loading` is true */}
+        {<section className="section">
+        <div className="section-head">
+          <h2 className="section-title">Latest news</h2>
+        </div>
+        <CategoryChips active={category} onChange={setCategory} />
+
+        {loading && <p className="notice">Loading stories...</p>}
+
+        {error && <p className="notice notice-error">{error}</p>}
+
+        {!loading && !error && items.length === 0 && (
+          <p className="notice">No stories in this category yet.</p>
+        )}
+
+        {!loading && (
+          <div className="grid">
+            {items.map((a) => (
+              <ArticleCard key={a.id} article={a} />
+            ))}
+          </div>
+        )}
+
+        {!loading && hasMore && (
+          <button className="btn btn-outline btn-block" onClick={loadMore}>
+            Load more stories
+          </button>
+        )}
+      </section>}
 
         {error && <p className="notice notice-error">{error}</p>}
 
