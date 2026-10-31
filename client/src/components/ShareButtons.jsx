@@ -7,8 +7,42 @@ export default function ShareButtons({ id, title }) {
   const u = encodeURIComponent(url);
   const t = encodeURIComponent(title);
 
-  function copyLink() {
-    // TODO: copy `url` to the clipboard and show a toast
+  async function copyToClipboard(text) {
+    // Modern async Clipboard API (needs HTTPS or localhost)
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+    // Fallback for insecure contexts / older browsers
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (!ok) throw new Error('Copy command failed');
+  }
+
+  async function copyLink() {
+    // Bonus: native share sheet on phones / supported browsers
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+        return;
+      } catch (err) {
+        if (err && err.name === 'AbortError') return; // user closed the sheet
+        // any other failure: fall through to copying the link
+      }
+    }
+    try {
+      await copyToClipboard(url);
+      toast('Link copied', 'success');
+    } catch {
+      toast('Could not copy the link', 'error');
+    }
   }
 
   return (
