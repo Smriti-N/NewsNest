@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getArticles } from '../api.js';
 import useCategories from '../hooks/useCategories.js';
@@ -19,6 +19,8 @@ export default function Search() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const abortControllerRef = useRef(null);
+
   function update(next) {
     const p = new URLSearchParams(params);
     Object.entries(next).forEach(([key, value]) => {
@@ -30,15 +32,35 @@ export default function Search() {
   }
 
   useEffect(() => {
+    // Cancel any in-flight request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setLoading(true);
     setError('');
-    getArticles({ q, category, sort, limit: 20 })
-      .then((res) => {
-        setResults(res.items);
-        setTotal(res.total);
-      })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+
+    const timer = setTimeout(() => {
+      getArticles({ q, category, sort, limit: 20, signal: controller.signal })
+        .then((res) => {
+          setResults(res.items);
+          setTotal(res.total);
+          setLoading(false);
+        })
+        .catch((e) => {
+          if (e.name === 'AbortError' || controller.signal.aborted) return;
+          setError(e.message);
+          setLoading(false);
+        });
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [q, category, sort]);
 
   return (
