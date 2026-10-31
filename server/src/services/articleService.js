@@ -5,6 +5,7 @@ import {
   MAX_TITLE_LENGTH,
 } from '../constants.js';
 import { countWords } from '../utils/wordCount.js';
+import { getStore } from '../store/index.js';
 
 export function filterByCategory(items, category) {
   if (!category || category === 'all') return items;
@@ -97,4 +98,71 @@ export function validateNewArticle(body = {}) {
     url: (body.url || '').toString().trim(),
   };
   return { errors, value };
+}
+
+function getArticleIdentifier(article) {
+  return article?.id ?? article?._id ?? article?.slug;
+}
+
+function getPublishedTime(article) {
+  const value =
+    article?.publishedAt ??
+    article?.publishedDate ??
+    article?.createdAt ??
+    article?.date;
+
+  const time = value ? new Date(value).getTime() : 0;
+  return Number.isFinite(time) ? time : 0;
+}
+
+export async function getArticleById(articleId, options) {
+  const store = await getStore();
+  return store.getById(articleId);
+}
+
+export async function getArticleNeighbors(articleId) {
+  const current = await getArticleById(articleId, { incrementViews: false });
+
+  if (!current) {
+    const error = new Error('Article not found');
+    error.status = 404;
+    throw error;
+  }
+
+  const store = await getStore();
+  const all = await store.getAll();
+
+  const sorted = all
+    .filter((article) => article.category === current.category)
+    .sort((a, b) => getPublishedTime(b) - getPublishedTime(a));
+
+  const currentIndex = sorted.findIndex(
+    (article) => String(getArticleIdentifier(article)) === String(getArticleIdentifier(current))
+  );
+
+  if (currentIndex === -1) {
+    return { current: getArticleIdentifier(current), previous: null, next: null };
+  }
+
+  return {
+    current: getArticleIdentifier(current),
+    previous: currentIndex > 0 ? toArticleSummary(sorted[currentIndex - 1]) : null,
+    next:
+      currentIndex < sorted.length - 1
+        ? toArticleSummary(sorted[currentIndex + 1])
+        : null,
+  };
+}
+
+function toArticleSummary(article) {
+  return {
+    id: getArticleIdentifier(article),
+    _id: article._id,
+    slug: article.slug,
+    title: article.title ?? article.headline,
+    headline: article.headline ?? article.title,
+    category: article.category,
+    publishedAt:
+      article.publishedAt ?? article.publishedDate ?? article.createdAt ?? article.date,
+  };
 }

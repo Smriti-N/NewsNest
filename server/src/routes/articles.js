@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import { getStore } from '../store/index.js';
-import {
+import * as articleService from '../services/articleService.js';
+
+const {
   listArticles,
   getTrending,
   getFeatured,
   getRelated,
   validateNewArticle,
-} from '../services/articleService.js';
+  getArticleNeighbors,
+} = articleService;
 
 const router = Router();
 
@@ -55,6 +58,28 @@ router.get('/:id', async (req, res, next) => {
     res.json(article);
   } catch (err) {
     next(err);
+  }
+});
+
+router.get('/:id/neighbors', async (req, res) => {
+  try {
+    const navigation = await articleService.getArticleNeighbors(req.params.id);
+    res.json(navigation);
+  } catch (error) {
+    res.status(error.status || 500).json({
+      error: error.message || 'Could not load article navigation.',
+    });
+  }
+});
+
+router.get('/:id/navigation', async (req, res, next) => {
+  try {
+    const navigation = await articleService.getArticleNeighbors(req.params.id);
+    res.json(navigation);
+  } catch (error) {
+    res.status(error.status || 500).json({
+      error: error.message || 'Could not load article navigation.',
+    });
   }
 });
 

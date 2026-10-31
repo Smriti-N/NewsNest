@@ -28,6 +28,16 @@ export const getRelated = (id) => request(`/articles/${id}/related`);
 export const recordView = (id) => request(`/articles/${id}/view`, { method: 'POST' });
 export const getCategories = () => request('/categories');
 
+export async function getArticleNeighbors(articleId) {
+  const response = await fetch(`/api/articles/${encodeURIComponent(articleId)}/neighbors`);
+
+  if (!response.ok) {
+    throw new Error('Could not load article navigation.');
+  }
+
+  return response.json();
+}
+
 export function createArticle(body) {
   return request('/articles', {
     method: 'POST',
