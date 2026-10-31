@@ -6,6 +6,7 @@ import {
   getFeatured,
   getRelated,
   validateNewArticle,
+  getAdjacentArticles,
 } from '../services/articleService.js';
 
 const router = Router();
@@ -52,7 +53,16 @@ router.get('/:id', async (req, res, next) => {
     const store = await getStore();
     const article = await store.getById(req.params.id);
     if (!article) return res.status(404).json({ error: 'Story not found' });
-    res.json(article);
+
+    // Fetch all stories to compute previous and next in the same category
+    const all = await store.getAll();
+    const { prev, next: nextStory } = getAdjacentArticles(all, article);
+
+    res.json({
+      ...article,
+      prev,
+      next: nextStory,
+    });
   } catch (err) {
     next(err);
   }

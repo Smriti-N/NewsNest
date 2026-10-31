@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getArticle, getRelated, recordView } from '../api.js';
 import Thumb from '../components/Thumb.jsx';
 import Icon from '../components/Icon.jsx';
@@ -13,6 +13,7 @@ const counted = new Set();
 
 export default function Article() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [article, setArticle] = useState(null);
   const [related, setRelated] = useState([]);
   const [error, setError] = useState('');
@@ -40,6 +41,32 @@ export default function Article() {
     };
   }, [id]);
 
+  // Arrow key navigation (ignoring form inputs)
+  useEffect(() => {
+    function handleKeyDown(e) {
+      const tag = e.target.tagName?.toLowerCase();
+      if (
+        tag === 'input' ||
+        tag === 'textarea' ||
+        tag === 'select' ||
+        e.target.isContentEditable
+      ) {
+        return;
+      }
+
+      if (e.key === 'ArrowLeft' && article?.prev) {
+        e.preventDefault();
+        navigate(`/article/${article.prev.id}`);
+      } else if (e.key === 'ArrowRight' && article?.next) {
+        e.preventDefault();
+        navigate(`/article/${article.next.id}`);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [article, navigate]);
+
   if (error) {
     return (
       <section>
@@ -53,8 +80,8 @@ export default function Article() {
   if (!article) return <p className="muted">Loading story...</p>;
 
   return (
-    <div className="article-layout">
-      <article className="article-main">
+    <div className="article-layout" key={article.id}>
+      <article className="article-main article-fade-slide">
         <nav className="breadcrumb" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
           <span>/</span>
@@ -91,10 +118,22 @@ export default function Article() {
         )}
 
         <div className="article-nav">
-          <button className="btn btn-outline" disabled title="Coming soon">
+          <button
+            className="btn btn-outline"
+            disabled={!article.prev}
+            onClick={() => article.prev && navigate(`/article/${article.prev.id}`)}
+            title={article.prev ? article.prev.title : 'No previous story'}
+            aria-label={article.prev ? `Previous story: ${article.prev.title}` : 'No previous story'}
+          >
             <Icon name="chevron-left" size={16} /> Previous story
           </button>
-          <button className="btn btn-outline" disabled title="Coming soon">
+          <button
+            className="btn btn-outline"
+            disabled={!article.next}
+            onClick={() => article.next && navigate(`/article/${article.next.id}`)}
+            title={article.next ? article.next.title : 'No next story'}
+            aria-label={article.next ? `Next story: ${article.next.title}` : 'No next story'}
+          >
             Next story <Icon name="chevron-right" size={16} />
           </button>
         </div>
