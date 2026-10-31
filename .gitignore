@@ -1,6 +1,8 @@
 node_modules/
 dist/
 .env
+.port
 .DS_Store
 *.log
 coverage/
+docs/

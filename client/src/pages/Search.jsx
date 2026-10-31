@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getArticles } from '../api.js';
 import useCategories from '../hooks/useCategories.js';
@@ -6,6 +6,7 @@ import ArticleRow from '../components/ArticleRow.jsx';
 import Icon from '../components/Icon.jsx';
 
 const SUGGESTIONS = ['solar', 'school', 'cricket', 'robot', 'comet'];
+const DEBOUNCE_MS = 300;
 
 export default function Search() {
   const [params, setParams] = useSearchParams();
@@ -19,6 +20,13 @@ export default function Search() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // Tracks the latest request so stale responses are ignored
+  const requestIdRef = useRef(0);
+  // Holds the AbortController for the in-flight request
+  const abortRef = useRef(null);
+  // Holds the debounce timer
+  const timerRef = useRef(null);
+
   function update(next) {
     const p = new URLSearchParams(params);
     Object.entries(next).forEach(([key, value]) => {
@@ -29,17 +37,62 @@ export default function Search() {
     setParams(p, { replace: true });
   }
 
-  useEffect(() => {
+  const fetchResults = useCallback((searchQ, searchCategory, searchSort) => {
+    // Abort any in-flight request
+    if (abortRef.current) {
+      abortRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    // Increment request ID — only the latest request may update state
+    const id = ++requestIdRef.current;
+
     setLoading(true);
     setError('');
-    getArticles({ q, category, sort, limit: 20 })
+
+    getArticles({ q: searchQ, category: searchCategory, sort: searchSort, limit: 20, signal: controller.signal })
       .then((res) => {
+        // Only apply if this is still the latest request
+        if (id !== requestIdRef.current) return;
         setResults(res.items);
         setTotal(res.total);
+        setLoading(false);
       })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, [q, category, sort]);
+      .catch((e) => {
+        // Ignore aborted requests entirely
+        if (e.name === 'AbortError') return;
+        if (id !== requestIdRef.current) return;
+        setError(e.message);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    // Clear any pending debounce timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    // Debounce: wait DEBOUNCE_MS before firing the request
+    timerRef.current = setTimeout(() => {
+      fetchResults(q, category, sort);
+    }, DEBOUNCE_MS);
+
+    return () => {
+      clearTimeout(timerRef.current);
+    };
+  }, [q, category, sort, fetchResults]);
+
+  // Cleanup: abort in-flight request on unmount
+  useEffect(() => {
+    return () => {
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
+    };
+  }, []);
 
   return (
     <section>
