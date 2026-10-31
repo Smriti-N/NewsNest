@@ -13,6 +13,12 @@ export default function Navbar() {
     navigate(q ? `/search?q=${encodeURIComponent(q)}` : '/search');
   }
 
+  function toggleDarkMode() {
+    const nextDark = !dark;
+    setDark(nextDark);
+    document.documentElement.dataset.theme = nextDark ? 'dark' : 'light';
+  }
+
   return (
     <header className={`navbar${dark ? ' navbar-dark' : ''}`}>
       <div className="navbar-inner">
@@ -42,8 +48,9 @@ export default function Navbar() {
         <div className="nav-actions">
           <button
             className="icon-btn"
-            onClick={() => setDark(!dark)}
+            onClick={toggleDarkMode}
             aria-label="Toggle dark mode"
+            aria-pressed={dark}
           >
             <Icon name={dark ? 'sun' : 'moon'} size={18} />
           </button>
