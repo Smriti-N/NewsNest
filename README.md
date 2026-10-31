@@ -49,6 +49,10 @@ Copy `server/.env.example` to `server/.env` to change any of these:
 | `MONGO_URI` | empty | Leave empty and NewsNest never connects to a database: stories live in memory and reset when the server restarts. Set it only if you want to store stories in MongoDB. |
 | `API_DELAY_MS` | `700` | Adds a random delay of up to this many milliseconds to every API call, to imitate a slow network. Set `0` to turn it off. |
 
+## API
+
+Every endpoint, with parameters, `curl` examples and sample responses, is documented in [docs/API.md](docs/API.md).
+
 ## Project layout
 
 ```
