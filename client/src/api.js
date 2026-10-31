@@ -35,3 +35,29 @@ export function createArticle(body) {
     body: JSON.stringify(body),
   });
 }
+
+export async function subscribeToDailyDigest(email) {
+  const response = await fetch('/api/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.message || data.error || 'Subscription failed.');
+  }
+
+  return data;
+}
+
+export async function getSubscriberCount() {
+  const response = await fetch('/api/subscribe/count');
+
+  if (!response.ok) {
+    throw new Error('Could not load subscriber count.');
+  }
+
+  return response.json();
+}

@@ -1,13 +1,40 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useToast } from '../context/ToastContext.jsx';
-import Icon from './Icon.jsx';
+import { subscribeToDailyDigest } from '../api.js';
 
 export default function Footer() {
   const toast = useToast();
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState({ type: 'idle', message: '' });
 
-  function handleSubscribe(e) {
-    e.preventDefault();
-    toast('Subscriptions are coming soon.', 'info');
+  async function handleSubmit(event) {
+    event.preventDefault();
+    if (submitting) return;
+
+    setStatus({ type: 'idle', message: '' });
+    setSubmitting(true);
+
+    try {
+      const result = await subscribeToDailyDigest(email);
+      const message = result.message || 'You are subscribed to the Daily Digest.';
+      setStatus({
+        type: 'success',
+        message,
+      });
+      toast(message, 'success');
+      setEmail('');
+    } catch (error) {
+      const message = error.message || 'Subscription failed.';
+      setStatus({
+        type: 'error',
+        message,
+      });
+      toast(message, 'error');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -37,11 +64,26 @@ export default function Footer() {
           <Link to="/categories/science">Science</Link>
         </div>
         <div>
-          <h4>Daily digest</h4>
-          <form className="subscribe" onSubmit={handleSubscribe}>
-            <input type="email" placeholder="you@example.com" aria-label="Email address" required />
-            <button className="btn btn-primary" type="submit" aria-label="Subscribe">
-              <Icon name="mail" size={16} />
+          <h4>
+            <label htmlFor="daily-digest-email">Daily Digest</label>
+          </h4>
+          <form className="subscribe" onSubmit={handleSubmit}>
+            <input
+              id="daily-digest-email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="you@example.com"
+              aria-label="Email address"
+              required
+              disabled={submitting}
+            />
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={submitting || !email.trim()}
+            >
+              {submitting ? 'Subscribing...' : 'Subscribe'}
             </button>
           </form>
           <p className="footer-note">One email a day with the top five stories.</p>
