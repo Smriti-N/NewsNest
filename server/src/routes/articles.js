@@ -5,10 +5,38 @@ import {
   getTrending,
   getFeatured,
   getRelated,
+  getAdjacent,
   validateNewArticle,
 } from '../services/articleService.js';
+import { articleRateLimiter } from '../middleware/rateLimiter.js';
 
 const router = Router();
+const sseClients = new Set();
+
+export function broadcastArticle(article) {
+  const payload = `data: ${JSON.stringify(article)}\n\n`;
+  for (const client of sseClients) {
+    try {
+      client.write(payload);
+    } catch {
+      sseClients.delete(client);
+    }
+  }
+}
+
+router.get('/events', (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache, no-transform',
+    Connection: 'keep-alive',
+  });
+  res.write(': connected\n\n');
+  sseClients.add(res);
+
+  req.on('close', () => {
+    sseClients.delete(res);
+  });
+});
 
 router.get('/', async (req, res, next) => {
   try {
@@ -47,12 +75,12 @@ router.get('/featured', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id/adjacent', async (req, res, next) => {
   try {
     const store = await getStore();
     const article = await store.getById(req.params.id);
     if (!article) return res.status(404).json({ error: 'Story not found' });
-    res.json(article);
+    res.json(getAdjacent(await store.getAll(), article));
   } catch (err) {
     next(err);
   }
@@ -69,6 +97,17 @@ router.get('/:id/related', async (req, res, next) => {
   }
 });
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    const store = await getStore();
+    const article = await store.getById(req.params.id);
+    if (!article) return res.status(404).json({ error: 'Story not found' });
+    res.json(article);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post('/:id/view', async (req, res, next) => {
   try {
     const store = await getStore();
@@ -80,12 +119,13 @@ router.post('/:id/view', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', articleRateLimiter, async (req, res, next) => {
   try {
     const { errors, value } = validateNewArticle(req.body);
     if (errors.length) return res.status(400).json({ errors });
     const store = await getStore();
     const created = await store.create(value);
+    broadcastArticle(created);
     res.status(201).json(created);
   } catch (err) {
     next(err);
