@@ -30,15 +30,21 @@ export default function Search() {
   }
 
   useEffect(() => {
+    let ignore = false;
     setLoading(true);
     setError('');
     getArticles({ q, category, sort, limit: 20 })
       .then((res) => {
+        if (ignore) return;
         setResults(res.items);
         setTotal(res.total);
       })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+      .catch((e) => !ignore && setError(e.message))
+      .finally(() => !ignore && setLoading(false));
+
+    return () => {
+      ignore = true;
+    };
   }, [q, category, sort]);
 
   return (

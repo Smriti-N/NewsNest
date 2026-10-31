@@ -7,7 +7,8 @@ export default function Footer() {
 
   function handleSubscribe(e) {
     e.preventDefault();
-    toast('Subscriptions are coming soon.', 'info');
+    toast('Subscribed successfully!', 'success');
+    e.target.reset();
   }
 
   return (
