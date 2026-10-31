@@ -98,3 +98,28 @@ export function validateNewArticle(body = {}) {
   };
   return { errors, value };
 }
+
+export function getAdjacentArticles(all, currentArticle) {
+  if (!currentArticle) return { prev: null, next: null };
+
+  // 1. Get stories in the same category
+  // 2. Order by publish time (oldest to newest)
+  const categoryArticles = all
+    .filter((a) => a.category === currentArticle.category)
+    .sort((a, b) => new Date(a.publishedAt) - new Date(b.publishedAt));
+
+  const index = categoryArticles.findIndex((a) => a.id === currentArticle.id);
+
+  if (index === -1) {
+    return { prev: null, next: null };
+  }
+
+  const prev = index > 0 ? categoryArticles[index - 1] : null;
+  const next = index < categoryArticles.length - 1 ? categoryArticles[index + 1] : null;
+
+  return {
+    prev: prev ? { id: prev.id, title: prev.title } : null,
+    next: next ? { id: next.id, title: next.title } : null,
+  };
+}
+
