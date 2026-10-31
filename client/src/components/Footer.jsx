@@ -1,13 +1,34 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useToast } from '../context/ToastContext.jsx';
+import { subscribe } from '../api.js';
 import Icon from './Icon.jsx';
 
 export default function Footer() {
   const toast = useToast();
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  function handleSubscribe(e) {
+  async function handleSubscribe(e) {
     e.preventDefault();
-    toast('Subscriptions are coming soon.', 'info');
+    if (!email.trim()) return;
+
+    setLoading(true);
+    try {
+      const res = await subscribe(email.trim());
+      toast(res.message || 'Subscribed successfully!', 'success');
+      setEmail('');
+    } catch (err) {
+      if (err.status === 409) {
+        toast('This email is already subscribed.', 'info');
+      } else if (err.status === 400) {
+        toast(err.message || 'Please provide a valid email.', 'error');
+      } else {
+        toast('Subscription failed. Please try again.', 'error');
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -39,8 +60,21 @@ export default function Footer() {
         <div>
           <h4>Daily digest</h4>
           <form className="subscribe" onSubmit={handleSubscribe}>
-            <input type="email" placeholder="you@example.com" aria-label="Email address" required />
-            <button className="btn btn-primary" type="submit" aria-label="Subscribe">
+            <input
+              type="email"
+              placeholder="you@example.com"
+              aria-label="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+              required
+            />
+            <button
+              className="btn btn-primary"
+              type="submit"
+              aria-label="Subscribe"
+              disabled={loading}
+            >
               <Icon name="mail" size={16} />
             </button>
           </form>
