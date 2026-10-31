@@ -28,9 +28,8 @@ export function sortArticles(items, sort = 'latest') {
 
 export function paginate(items, page, limit) {
   const start = (page - 1) * limit;
-  const end = start + limit - 1;
   return {
-    items: items.slice(start, end),
+    items: items.slice(start, start + limit),
     page,
     limit,
     total: items.length,
