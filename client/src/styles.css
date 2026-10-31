@@ -246,6 +246,7 @@ ul { margin: 0; padding-left: 1.2rem; }
 .article-hero .tag { position: absolute; left: 16px; bottom: 16px; background: rgba(255, 255, 255, 0.92); }
 .article-summary { font-size: 1.2rem; line-height: 1.7; margin: 0 0 24px; max-width: 62ch; }
 
+.article-main { animation: fade 0.25s ease; }
 .article-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); }
 
 /* ---------- Search ---------- */
@@ -329,6 +330,6 @@ ul { margin: 0; padding-left: 1.2rem; }
   .footer-grid { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ticker-track, .hero-empty, .hero-slide, .toast { animation: none; }
+  .ticker-track, .hero-empty, .hero-slide, .toast, .article-main { animation: none; }
   .card, .btn, .tile { transition: none; }
 }
