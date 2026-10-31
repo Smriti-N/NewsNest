@@ -8,6 +8,14 @@ Built with the MERN stack (MongoDB, Express, React, Node). It runs **without any
 
 > **Hack Day project.** This repo is deliberately incomplete: some things are broken and some features are missing. Each one is a GitHub issue. Pick one, fix it, and open a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## Screenshots
+
+| Home | Story |
+| --- | --- |
+| ![Home page with the Breaking ticker, the featured story carousel, the Trending now list and the Latest news cards](docs/images/home.jpg) | ![Story page showing the headline, the 50-word summary, Previous and Next buttons, related news and share buttons](docs/images/story.jpg) |
+| **Search** | **Saved** |
+| ![Search page with results for "solar", category and sort filters and suggested searches](docs/images/search.jpg) | ![Saved page listing three bookmarked stories with a Clear all button](docs/images/saved.jpg) |
+
 ## Features
 
 - Breaking-news ticker and a featured story carousel
