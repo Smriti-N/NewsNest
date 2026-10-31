@@ -7,8 +7,34 @@ export default function ShareButtons({ id, title }) {
   const u = encodeURIComponent(url);
   const t = encodeURIComponent(title);
 
-  function copyLink() {
-    // TODO: copy `url` to the clipboard and show a toast
+  async function copyLink() {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+        toast('Link shared', 'success');
+        return;
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = url;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      toast('Link copied', 'success');
+    } catch {
+      toast('Could not copy link', 'error');
+    }
   }
 
   return (
