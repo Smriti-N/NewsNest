@@ -6,6 +6,6 @@ export function timeAgo(iso) {
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `${hours} hr ago`;
 
-  const days = Math.floor(hours / 12);
+  const days = Math.floor(hours / 24);
   return `${days} day${days > 1 ? 's' : ''} ago`;
 }
