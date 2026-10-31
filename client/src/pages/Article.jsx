@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { getArticle, getRelated, recordView } from '../api.js';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { getArticle, getArticleNeighbors, getRelated, recordView } from '../api.js';
 import Thumb from '../components/Thumb.jsx';
 import Icon from '../components/Icon.jsx';
 import BookmarkButton from '../components/BookmarkButton.jsx';
@@ -13,48 +13,131 @@ const counted = new Set();
 
 export default function Article() {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [article, setArticle] = useState(null);
+  const [navigation, setNavigation] = useState({ previous: null, next: null });
   const [related, setRelated] = useState([]);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
-    let ignore = false;
+    const requestId = ++requestIdRef.current;
     window.scrollTo(0, 0);
-    setArticle(null);
+    setLoading(true);
+    setError(null);
     setRelated([]);
-    setError('');
 
-    getArticle(id)
-      .then((a) => !ignore && setArticle(a))
-      .catch((e) => !ignore && setError(e.message));
+    async function loadArticle() {
+      try {
+        const [articleData, neighborData] = await Promise.all([
+          getArticle(id),
+          getArticleNeighbors(id),
+        ]);
+
+        if (requestId !== requestIdRef.current) return;
+
+        setArticle(articleData);
+        setNavigation({
+          previous: neighborData?.previous ?? null,
+          next: neighborData?.next ?? null,
+        });
+
+        setIsTransitioning(true);
+        window.setTimeout(() => {
+          if (requestId === requestIdRef.current) {
+            setIsTransitioning(false);
+          }
+        }, 180);
+      } catch (err) {
+        if (requestId !== requestIdRef.current) return;
+        setError(err.message || 'Could not load this story.');
+      } finally {
+        if (requestId === requestIdRef.current) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadArticle();
+
     getRelated(id)
-      .then((r) => !ignore && setRelated(r))
+      .then((r) => {
+        if (requestId === requestIdRef.current) {
+          setRelated(r);
+        }
+      })
       .catch(() => {});
 
     if (!counted.has(id)) {
       counted.add(id);
       recordView(id).catch(() => {});
     }
+
     return () => {
-      ignore = true;
+      requestIdRef.current += 1;
     };
   }, [id]);
+
+  const goTo = useCallback(
+    (target) => {
+      if (!target?.id && !target?._id && !target?.slug) return;
+      const targetId = target.id ?? target._id ?? target.slug;
+      navigate(`/article/${encodeURIComponent(targetId)}`);
+    },
+    [navigate]
+  );
+
+  useEffect(() => {
+    function isTypingTarget(target) {
+      if (!target) return false;
+      const tagName = target.tagName?.toLowerCase();
+      return (
+        tagName === 'input' ||
+        tagName === 'textarea' ||
+        tagName === 'select' ||
+        target.isContentEditable
+      );
+    }
+
+    function onKeyDown(event) {
+      if (isTypingTarget(event.target)) return;
+
+      if (event.key === 'ArrowLeft' && navigation.previous) {
+        event.preventDefault();
+        goTo(navigation.previous);
+      }
+
+      if (event.key === 'ArrowRight' && navigation.next) {
+        event.preventDefault();
+        goTo(navigation.next);
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [navigation, goTo]);
 
   if (error) {
     return (
       <section>
         <h1 className="page-title">Story not found</h1>
-        <p className="notice notice-error">{error}</p>
+        <p className="notice notice-error" role="alert">{error}</p>
         <Link to="/" className="btn btn-primary">Back to the feed</Link>
       </section>
     );
   }
 
-  if (!article) return <p className="muted">Loading story...</p>;
+  if (loading || !article) return <p className="muted">Loading story...</p>;
 
   return (
     <div className="article-layout">
-      <article className="article-main">
+      <article
+        className={`article-main article-page ${isTransitioning ? 'is-transitioning' : ''}`}
+      >
         <nav className="breadcrumb" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
           <span>/</span>
@@ -90,14 +173,26 @@ export default function Article() {
           </a>
         )}
 
-        <div className="article-nav">
-          <button className="btn btn-outline" disabled title="Coming soon">
+        <nav className="article-nav story-navigation" aria-label="Story navigation">
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={() => goTo(navigation.previous)}
+            disabled={!navigation.previous}
+            aria-disabled={!navigation.previous}
+          >
             <Icon name="chevron-left" size={16} /> Previous story
           </button>
-          <button className="btn btn-outline" disabled title="Coming soon">
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={() => goTo(navigation.next)}
+            disabled={!navigation.next}
+            aria-disabled={!navigation.next}
+          >
             Next story <Icon name="chevron-right" size={16} />
           </button>
-        </div>
+        </nav>
       </article>
 
       <div className="article-side">

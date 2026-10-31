@@ -28,10 +28,46 @@ export const getRelated = (id) => request(`/articles/${id}/related`);
 export const recordView = (id) => request(`/articles/${id}/view`, { method: 'POST' });
 export const getCategories = () => request('/categories');
 
+export async function getArticleNeighbors(articleId) {
+  const response = await fetch(`/api/articles/${encodeURIComponent(articleId)}/neighbors`);
+
+  if (!response.ok) {
+    throw new Error('Could not load article navigation.');
+  }
+
+  return response.json();
+}
+
 export function createArticle(body) {
   return request('/articles', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
+}
+
+export async function subscribeToDailyDigest(email) {
+  const response = await fetch('/api/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.message || data.error || 'Subscription failed.');
+  }
+
+  return data;
+}
+
+export async function getSubscriberCount() {
+  const response = await fetch('/api/subscribe/count');
+
+  if (!response.ok) {
+    throw new Error('Could not load subscriber count.');
+  }
+
+  return response.json();
 }
