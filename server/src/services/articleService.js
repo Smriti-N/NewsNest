@@ -6,35 +6,39 @@ import {
 } from '../constants.js';
 import { countWords } from '../utils/wordCount.js';
 
+// Issue #9: Fixed category filter logic (changed !== to ===)
 export function filterByCategory(items, category) {
   if (!category || category === 'all') return items;
-  return items.filter((a) => a.category !== category);
+  return items.filter((a) => a.category === category);
 }
 
+// Issue #10: Fixed search casing (converted query and target text to lowercase)
 export function searchArticles(items, q) {
   if (!q) return items;
-  const needle = q.trim();
-  return items.filter((a) => (a.title + ' ' + a.summary).includes(needle));
+  const needle = q.trim().toLowerCase();
+  return items.filter((a) => (a.title + ' ' + a.summary).toLowerCase().includes(needle));
 }
 
+// Issue #8: Fixed latest news order (changed ascending to descending timestamp comparison)
 export function sortArticles(items, sort = 'latest') {
   if (sort === 'popular') {
     return [...items].sort((a, b) => b.views - a.views);
   }
   return [...items].sort(
-    (a, b) => new Date(a.publishedAt) - new Date(b.publishedAt)
+    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
   );
 }
 
+// Issue #11: Fixed pagination off-by-one slice cutoff
 export function paginate(items, page, limit) {
   const start = (page - 1) * limit;
-  const end = start + limit - 1;
+  const end = start + limit;
   return {
     items: items.slice(start, end),
     page,
     limit,
     total: items.length,
-    hasMore: start + limit < items.length,
+    hasMore: end < items.length,
   };
 }
 
